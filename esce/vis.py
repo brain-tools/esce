@@ -78,7 +78,7 @@ def hp_plot(
             loc="lower center",
             frameon=False,
         )
-        fig.savefig(root / f"hp_new_{model_name}.png")
+        fig.savefig(root / f"hp_new_{model_name}_{title}.png")
         if show:
             pylab.plt.show()
 
@@ -127,7 +127,7 @@ def hp_plot(
             loc="lower center",
             frameon=False,
         )
-        fig.savefig(root / f"hp_{model_name}.png")
+        fig.savefig(root / f"hp_{model_name}_{title}.png")
         if show:
             pylab.plt.show()
 
@@ -169,14 +169,14 @@ def sc_plot(root: Path, title: str, df: pd.DataFrame, show: bool = False) -> Non
     ax.get_xaxis().set_tick_params(which="minor", size=0)
     ax.get_xaxis().set_tick_params(which="minor", width=0)
 
-    fig.subplots_adjust(bottom=0.3)
+    fig.subplots_adjust(bottom=0.2)
 
     pylab.plt.suptitle("Sample scores")
     pylab.plt.title(title, y=1.0, fontsize=8)
     pylab.figlegend(
         handles=legend, ncol=2, fontsize=8, loc="lower center", frameon=False
     )
-    fig.savefig(root / "sc_plot.png")
+    fig.savefig(root / f"sc_plot_{title}.png")
     if show:
         pylab.plt.show()
 
