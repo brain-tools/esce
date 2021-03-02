@@ -275,7 +275,7 @@ def retrieve(
     root_path = Path("plots") / path.stem if output is None else output
     root_path.mkdir(exist_ok=True, parents=True)
 
-    sc_df.to_csv(root_path / "scores.csv", index=False)
+    sc_df.to_csv(root_path / f"scores_{path.stem}.csv", index=False)
 
     show_hp = show == "all" or show == "hp"
     show_sc = show == "all" or show == "sc"
