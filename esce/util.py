@@ -10,7 +10,28 @@ from typing import Dict, Any, Union, Tuple, Optional
 import numpy as np
 
 
-def flip(x: np.ndarray, prob: float, seed: int) -> np.ndarray:
+def uniform_noise_matrix(M: int, p: float) -> np.ndarray:
+    # p: probability of label changing
+    N = np.zeros((M, M))
+    for i in range(M):
+        for j in range(M):
+            N[i][j] = 1 - p if i == j else p / (M - 1)
+    return N
+
+
+def apply_noise_matrix(labels: np.ndarray, N: np.ndarray, seed: int) -> np.ndarray:
+    out = np.zeros(len(labels))
+    unique_labels = np.unique(labels)
+
+    lbl2idx = {lbl: i for i, lbl in enumerate(unique_labels)}
+    random_state = np.random.RandomState(seed)
+    for i, l in enumerate(labels):
+        probs = N[lbl2idx[l]]
+        out[i] = random_state.choice(unique_labels, 1, p=probs)
+    return out
+
+
+def flip_binary_label(x: np.ndarray, prob: float, seed: int) -> np.ndarray:
     np.random.seed(seed)
     indices = np.random.random(x.shape) < prob
     return np.logical_xor(x, indices).astype(int)

@@ -1,10 +1,16 @@
-from esce.util import load_dataset, load_split, flip, flt2str
 from esce.grid import GRID, load_grid
 from esce.vis import hp_plot, sc_plot
 from esce.sampling import split_grid
 from esce.models import score_splits, MODELS, RegressionModel, precompute_kernels
 from esce.data import DATA
-from esce.util import hash_dict
+from esce.util import (
+    hash_dict,
+    uniform_noise_matrix,
+    apply_noise_matrix,
+    load_dataset,
+    load_split,
+    flt2str,
+)
 import argparse
 from pathlib import Path
 from typing import List, Optional
@@ -169,8 +175,9 @@ def datagen(
     # Generate default label and label noise
     labels = {"default": y}
     if lbl_noise is not None:
-        for lbl in lbl_noise:
-            labels[f"noise_{flt2str(lbl)}"] = flip(y, lbl, 0)
+        for p in lbl_noise:
+            N = uniform_noise_matrix(len(np.unique(y)), p)
+            labels[f"noise_{flt2str(lbl)}"] = apply_noise_matrix(y, N, 0)
 
     # Write data and labels to hdf5 or pkl
     path.parent.mkdir(parents=True, exist_ok=True)
