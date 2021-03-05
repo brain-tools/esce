@@ -177,7 +177,7 @@ def datagen(
     if lbl_noise is not None:
         for p in lbl_noise:
             N = uniform_noise_matrix(len(np.unique(y)), p)
-            labels[f"noise_{flt2str(lbl)}"] = apply_noise_matrix(y, N, 0)
+            labels[f"noise_{flt2str(p)}"] = apply_noise_matrix(y, N, 0)
 
     # Write data and labels to hdf5 or pkl
     path.parent.mkdir(parents=True, exist_ok=True)
