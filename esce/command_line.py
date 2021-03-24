@@ -199,7 +199,7 @@ def datagen(
     print(f"Generated {dataset} data file '{path}'.")
 
 
-def splitgen(data_path: Path, label: str, n_seeds: int, samples: List[int]) -> None:
+def splitgen(data_path: Path, label: str, n_seeds: int, samples: List[int], n_val: int, n_test: int) -> None:
     """
     Generates a split file.
     The file will be placed in the 'splits' directory.
@@ -215,7 +215,7 @@ def splitgen(data_path: Path, label: str, n_seeds: int, samples: List[int]) -> N
     path.parent.mkdir(parents=True, exist_ok=True)
 
     _, y = load_dataset(data_path, label)
-    splits = split_grid(y, n_samples=samples, n_seeds=n_seeds)
+    splits = split_grid(y, n_samples=samples, n_seeds=n_seeds, n_val=n_val, n_test=n_test)
 
     with path.open("wb") as f:
         pickle.dump((n_seeds, splits), f)
@@ -398,6 +398,8 @@ def main() -> None:
     splitgen_parser.add_argument(
         "--samples", nargs="+", help="list number of samples", required=True, type=int
     )
+    splitgen_parser.add_argument("--val", type=int, help="validation set size", default=1000)
+    splitgen_parser.add_argument("--test", type=int, help="test set size", default=1000)
     splitgen_parser.set_defaults(splitgen=True)
 
     retrieve_parser.add_argument(
@@ -445,7 +447,7 @@ def main() -> None:
             args.format,
         )
     elif args.splitgen:
-        splitgen(Path(args.data), args.label, args.seeds, args.samples)
+        splitgen(Path(args.data), args.label, args.seeds, args.samples, args.val, args.test)
     elif args.retrieve:
         out_path = Path(args.output) if args.output is not None else None
         retrieve(
