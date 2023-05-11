@@ -2,11 +2,17 @@ import yaml, glob, os, textwrap
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
+from pathlib import Path
 
 
 def plot(
     stats_filename, output_filename, grid_filename, hyperparameter_scales, model_name, title
 ):
+    # ignore empty files (insufficient samples in dataset)
+    if os.stat(stats_filename).st_size > 0:
+        Path(output_filename).touch()
+        return
+
     scores = pd.read_csv(stats_filename)
     grid = yaml.safe_load(open(grid_filename, "r"))[model_name]
     hp_names = list(grid.keys())
