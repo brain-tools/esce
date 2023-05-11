@@ -53,10 +53,10 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
         df_["cni"] = row.cni
         data.append(df_)
 
-    data = pd.concat(data, axis=0, ignore_index=True)
-
     # skip if no data
-    if data.empty:
+    if data:
+        data = pd.concat(data, axis=0, ignore_index=True)
+    else:
         Path(output_filename).touch()
         return
 
