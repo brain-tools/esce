@@ -41,7 +41,7 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
             continue
         with open(row.full_path) as f:
             score = yaml.safe_load(f)
-        if not 'n' in score:
+        if not score:
             print(row.full_path, "is empty - skipping")
             continue
         df_ = pd.DataFrame(
