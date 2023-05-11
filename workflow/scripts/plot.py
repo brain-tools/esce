@@ -4,6 +4,7 @@ import plotly.express as px
 import plotly.graph_objs as go
 import textwrap
 import numpy as np
+from pathlib import Path
 
 def process_results(available_results):
     df = pd.DataFrame(available_results, columns=["full_path"])
@@ -50,6 +51,10 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
         data.append(df_)
 
     data = pd.concat(data, axis=0, ignore_index=True)
+
+    if data.empty:
+        Path(output_filename).touch()
+        return
 
     fig = px.line(
         data,
