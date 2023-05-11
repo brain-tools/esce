@@ -41,7 +41,7 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
             continue
         with open(row.full_path) as f:
             score = yaml.safe_load(f)
-        if not score:
+        if not 'n' in score:
             print(row.full_path, "is empty - skipping")
             continue
         df_ = pd.DataFrame(
@@ -54,7 +54,7 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
         data.append(df_)
 
     # skip if no data
-    if data:
+    if len(data) > 0:
         data = pd.concat(data, axis=0, ignore_index=True)
     else:
         Path(output_filename).touch()
