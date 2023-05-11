@@ -53,6 +53,7 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
         df_["cni"] = row.cni
         data.append(df_)
 
+    print(data)
     # skip if no data
     if len(data) > 0:
         data = pd.concat(data, axis=0, ignore_index=True)
