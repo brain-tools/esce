@@ -41,6 +41,9 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
             continue
         with open(row.full_path) as f:
             score = yaml.safe_load(f)
+        if not score:
+            print(row.full_path, "is empty - skipping")
+            continue
         df_ = pd.DataFrame(
             {"n": score["x"], "y": score["y_mean"], "y_std": score["y_std"]}
         )
@@ -52,6 +55,7 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
 
     data = pd.concat(data, axis=0, ignore_index=True)
 
+    # skip if no data
     if data.empty:
         Path(output_filename).touch()
         return
