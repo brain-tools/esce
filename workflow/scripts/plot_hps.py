@@ -8,13 +8,14 @@ from pathlib import Path
 def plot(
     stats_filename, output_filename, grid_filename, hyperparameter_scales, model_name, title
 ):
+    grid = yaml.safe_load(open(grid_filename, "r"))[model_name]
     # ignore empty files (insufficient samples in dataset)
-    if os.stat(stats_filename).st_size == 0 or model_name == "majority-classifier":
+    if os.stat(stats_filename).st_size == 0 or not grid:
         Path(output_filename).touch()
         return
 
     scores = pd.read_csv(stats_filename)
-    grid = yaml.safe_load(open(grid_filename, "r"))[model_name]
+    
     hp_names = list(grid.keys())
     metric = "r2_val" if "r2_val" in scores.columns else "acc_val"
 
