@@ -9,7 +9,7 @@ def plot(
     stats_filename, output_filename, grid_filename, hyperparameter_scales, model_name, title
 ):
     # ignore empty files (insufficient samples in dataset)
-    if os.stat(stats_filename).st_size == 0:
+    if os.stat(stats_filename).st_size == 0 or model_name == "majority-classifier":
         Path(output_filename).touch()
         return
 
