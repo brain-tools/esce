@@ -9,6 +9,7 @@ from sklearn.linear_model import LinearRegression
 
 def confound_regression(data_path: str, confounds_path: str, out_path: str):
     """
+    
     A confounder is a variable whose presence affects the variables being studied 
     so that the results do not reflect the actual relationship. 
     

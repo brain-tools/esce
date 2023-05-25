@@ -14,8 +14,8 @@ def plot(
     stats_filename, output_filename, grid_filename, hyperparameter_scales, model_name, title
 ):
     """
-    Extract hyperparameter and their performance for the model, 
-    then plot the figure.
+
+    Extract hyperparameter and their performance for the model, then plot the figure.
 
     Args:
         stats_filename: stats file name for stats retrieval

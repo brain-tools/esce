@@ -21,7 +21,7 @@ def process_results(available_results):
         available_results: scalar data of available results in the form of stats file list
 
     Returns:
-
+        processed dataframe from the inputted scalar data of available results
 
     """
 
@@ -46,7 +46,7 @@ def process_results(available_results):
         .str.split("_", expand=True)
     )
 
-    #new: figures aggregating over all confound corrections approaches
+    # figures aggregating over all confound corrections approaches
     df["cni"] = df[["features_cni", "targets_cni", "matching"]].agg("-".join, axis=1)
     return df
 

@@ -29,8 +29,7 @@ from sklearn.model_selection import ParameterGrid
 class BaseModel(ABC):
     """
     
-    Base model class for each model.
-    
+    Base model class for each model
     
     """
 
@@ -39,7 +38,11 @@ class BaseModel(ABC):
     scale_targets: bool
 
     def __init__(self, model_generator: Callable[..., Any], model_name: str):
-        """Initialize class using a model that is initialized later."""
+        """
+        
+        Initialize class using a model that is initialized later
+        
+        """
         self.model_generator = model_generator
         self.model_name = model_name
 
@@ -119,7 +122,11 @@ class BaseModel(ABC):
 
 
 class ClassifierModel(BaseModel):
-    """Base class for classifier models."""
+    """
+    
+    Base class for classifier models
+    
+    """
 
     scale_features = True
     scale_targets = False
@@ -144,7 +151,11 @@ class ClassifierModel(BaseModel):
 
 
 class RegressionModel(BaseModel):
-    """Base class for regression models."""
+    """
+    
+    Base class for regression models
+    
+    """
 
     scale_features = True
     scale_targets = True
@@ -185,7 +196,12 @@ MODELS = {
 
 def get_existing_scores(scores_path_list):
     """
+    
     In the case where data was precalculated due to extra minor adjustment, we extract the existing scores if the files exist
+    
+    Arguments:
+        scores_path_list: list of paths for the score files
+    
     """
     df_list = []
     for filename in scores_path_list:
@@ -211,6 +227,11 @@ def fit(
     grid_path,
     existing_scores_path_list,
 ):
+    """
+    
+    Base fit function
+
+    """
     split = json.load(open(split_path, "r"))
     if "error" in split:
         Path(scores_path).touch() # if error occurs, create file for snakemake to run smoothly

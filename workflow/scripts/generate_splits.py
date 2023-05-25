@@ -15,6 +15,11 @@ from sklearn.preprocessing import StandardScaler
 
 
 class NpEncoder(json.JSONEncoder):
+    """
+    
+    Convert data types for JSON
+
+    """
     def default(self, obj):
         if isinstance(obj, np.integer):
             return int(obj)
@@ -35,7 +40,21 @@ def generate_random_split(
     mask: Optional[np.ndarray] = False,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
+
     Standard random split 
+    
+    Arguments:
+        y: dataset in the format of a numpy array
+        n_train: size of the training set
+        n_val: size of the validation set
+        n_test: size of the test set
+        do_stratify: a boolean value to flag whether stratification should be performed while splitting
+        seed: random seed for splitting
+        mask: the mask for all the complete data entries
+    
+    Returns:
+        split: a dictionary of the index of the splitted(train/val/test) dataset and the parameters including sample size, seed, and whether stratification is performed
+
     """
     if mask is False:
         idx_originial = np.arange(len(y))
@@ -82,11 +101,24 @@ def generate_matched_split(
     mask: Optional[np.ndarray] = False,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
-    
-    1: patient group
-    0: control group
 
-    matching array: works similar to confound, 
+    In clinical experiments, the optimal case is to only have the control group being the exact copy (eg. studying the one different characteristic of a twin) of the subject being studied (patient group).
+    However, it is not possible in the real world, thus, we want to calculate the best match score of the control group for each subject to find the best control group candidates.
+    
+    It is worth noting that:
+        1: patient group
+        0: control group
+
+    Arguments:
+        y: dataset in the format of a numpy array
+        match: matching variable array, works similar to confound
+        n_train: size of the training set
+        n_val: size of the validation set
+        n_test: size of the test set
+        do_stratify: a boolean value to flag whether stratification should be performed while splitting
+        seed: random seed for splitting
+        mask: the mask for all the complete data entries
+
     """
     random_state = np.random.RandomState(seed)
     mask_orig = mask.copy()
@@ -148,7 +180,20 @@ def write_splitfile(
     stratify=False,
 ):
     """
-    
+    Use matching variables (eg. age, gender) and the 'balanced' flag to perform and save dataset split
+
+    Arguments:
+        features_path: path to the feature file
+        targets_path: path to the target file
+        split_path: path to the split file
+        sampling_path: the path to the matching variable table (e.g. age, gender, ed level)
+        sampling_type: matching options: [none, balanced, ]
+        n_train: size of the training set
+        n_val: size of the validation set
+        n_test: size of the test set
+        do_stratify: a boolean value to flag whether stratification should be performed while splitting
+        seed: random seed for splitting
+        stratify: a boolean value to flag whether stratification should be performed while splitting
     """
     # excluding not all fully available data
     x = np.load(features_path)

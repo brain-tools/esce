@@ -36,6 +36,7 @@ def prepare_data(
     custom_datasets: dict,
 ):
     """
+
     Prepare features, targets, and covariates in the data.
 
     Args:
@@ -44,6 +45,7 @@ def prepare_data(
         features_targets_covariates: the string decides which the function prepares
         variant: a special data type that can contain any kind of data
         custom_datasets: path for custom datasets 
+        
     """
     # read in predefined datasets or prepare empty files
     if (dataset, variant) in predefined_datasets:
