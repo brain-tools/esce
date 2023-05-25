@@ -45,14 +45,15 @@ def prepare_data(
         variant: a special data type that can contain any kind of data
         custom_datasets: path for custom datasets 
     """
-    
+    # read in predefined datasets or prepare empty files
     if (dataset, variant) in predefined_datasets:
         data = predefined_datasets[(dataset, variant)]()
-    elif features_targets_covariates == "covariates" and variant in [
+    elif features_targets_covariates == "covariates" and variant in [ # if predefined datasets don't exist, use dummy empty files
         "none",
         "balanced",
     ]:
         data = []
+    # turn datas into numpy arrays
     else:
         in_path = Path(custom_datasets[dataset][features_targets_covariates][variant])
         if in_path.suffix == ".csv":

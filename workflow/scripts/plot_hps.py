@@ -15,7 +15,7 @@ def plot(
 ):
     """
     Extract hyperparameter and their performance for the model, 
-    then scale and plot the figure.
+    then plot the figure.
 
     Args:
         stats_filename: stats file name for stats retrieval
@@ -49,7 +49,7 @@ def plot(
     )
 
     for i, v in enumerate(hp_names):
-        if v in hyperparameter_scales:
+        if v in hyperparameter_scales: # adds indicator for the scale for the highest and lowest hyperparam
             fig.add_hline(y=min(grid[v]), line_dash="dot", col=i + 1)
             fig.add_hline(y=max(grid[v]), line_dash="dot", col=i + 1)
             if hyperparameter_scales[v] == "log":

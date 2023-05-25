@@ -15,7 +15,7 @@ import numpy as np
 def process_results(available_results):
     """
     
-    Process results for plotting.
+    Process results for plotting using a list of avaiable stats files Snakemake provides 
 
     Args:
         available_results: scalar data of available results in the form of stats file list
@@ -51,10 +51,10 @@ def process_results(available_results):
     return df
 
 
-def plot(stats_file_list, output_filename, color_variable, linestyle_variable, title, max_x=6):
+def plot(stats_file_list, output_filename, color_variable, linestyle_variable, title, max_x):
     """
 
-    Plot five types of figures: 
+    Plot five types of figures controled in Snakemake by feeding in different data:
     1. individual learning curves for each prediction setup (plot_individually)
     2. figures aggregating over all feature sets (plot_by_features)
     3. figures aggregating over all target variables (plot_by_targets)
@@ -71,7 +71,7 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
 
     """
     
-    df = process_results(stats_file_list)
+    df = process_results(stats_file_list) # Snakemake provides a list of avaiable stats files
 
     data = []
     for _, row in df.iterrows():
