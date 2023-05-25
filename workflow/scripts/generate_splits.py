@@ -157,9 +157,10 @@ def write_splitfile(
         matching = False
     elif sampling_type == "balanced":
         matching = False
-        idx_undersampled = RandomUnderSampler(random_state=seed).fit_resample(
-            idx_all[xy_mask], y[xy_mask]
+        idx_undersampled, _ = RandomUnderSampler(random_state=seed).fit_resample(
+            idx_all[xy_mask].reshape(-1,1), y[xy_mask]
         )
+        idx_undersampled=idx_undersampled.reshape(-1)
         xy_mask[[i for i in idx_all if i not in idx_undersampled]] = False
     elif len(matching) == len(y) and len(matching.shape) > 1:
         assert n_classes == 2
@@ -172,7 +173,7 @@ def write_splitfile(
     else:
         raise Exception("invalid sampling file")
 
-    if matching is False and sum(xy_mask) > n_train + n_val + n_test:
+    if matching is False and (sum(xy_mask) > n_train + n_val + n_test):
         split_dict = generate_random_split(
             y=y,
             n_train=n_train,
@@ -182,7 +183,7 @@ def write_splitfile(
             mask=xy_mask,
             seed=seed,
         )
-    elif sum(xy_mask[y == 1]) > n_train // 2 + n_val // 2 + n_test // 2:
+    elif matching is not False and (sum(xy_mask[y == 1]) > n_train // 2 + n_val // 2 + n_test // 2):
         split_dict = generate_matched_split(
             y=y,
             match=matching,
@@ -211,6 +212,8 @@ n_val = min(
 n_test = min(
     round(n_train * snakemake.params.val_test_frac), snakemake.params.val_test_max
 )
+n_val = max(n_val, snakemake.params.val_test_min)
+n_test = max(n_test, snakemake.params.val_test_min)
 
 write_splitfile(
     features_path=snakemake.input.features,

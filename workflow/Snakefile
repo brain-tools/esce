@@ -98,6 +98,7 @@ rule split:
     params:
         val_test_frac=config["val_test_frac"],
         val_test_max=config["val_test_max"],
+        val_test_min=config["val_test_min"],
         stratify=config["stratify"],
     output:
         split="results/{dataset}/splits/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}.json",

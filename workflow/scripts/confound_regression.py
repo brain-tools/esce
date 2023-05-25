@@ -44,9 +44,14 @@ def confound_regression(data_path: str, confounds_path: str, out_path: str):
 
     model = LinearRegression()
     model.fit(confounds[xy_mask], data_raw[xy_mask])
-    data_predicted = model.predict(confounds)
-    data_corrected = data_raw - data_predicted
-
+    # to deal with nan values in confounds we loop over the data
+    data_corrected = np.empty(data_raw.shape)
+    for i in range(data_raw.shape[0]):
+        if xy_mask[i]:
+            data_corrected[i] = data_raw[i] - model.predict(confounds[i].reshape(1, -1))
+        else:
+            data_corrected[i] = np.nan
+    
     np.save(out_path, data_corrected)
 
 

@@ -1,5 +1,6 @@
 val_test_frac: .5
 val_test_max: 1000
+val_test_min: 50
 bootstrap_repetitions: 100
 stratify: False
 
