@@ -1,3 +1,9 @@
+"""
+extrapolate.py
+====================================
+
+"""
+    
 import json
 
 import numpy as np
@@ -11,6 +17,12 @@ MIN_DOF = 2
 
 
 class NpEncoder(json.JSONEncoder):
+    """
+    Fetches rows from a Bigtable, 
+    a data storage for large amounts of single-keyed data with low latency.
+    Then extrapolate the learning curve beyond the available sample size.
+
+    """
     def default(self, obj):
         if isinstance(obj, np.integer):
             return int(obj)
@@ -22,6 +34,16 @@ class NpEncoder(json.JSONEncoder):
 
 
 def fit_curve(x, y, y_e):
+    """
+    Fetches rows from a Bigtable, 
+    a data storage for large amounts of single-keyed data with low latency.
+    Then extrapolate the learning curve beyond the available sample size.
+
+    Args:
+        x: features
+        y: targets
+        y_e: standar error
+    """
     result = {
         "p_mean": np.nan,
         "r2": np.nan,
@@ -48,6 +70,7 @@ def fit_curve(x, y, y_e):
         result["r2"] = r2_score(
             y_mean[mask], p_mean[0] * x[mask] ** (-p_mean[1]) + p_mean[2]
         )
+        # sem means standard error of the mean
         result["chi2"] = (
             sum(
                 (y_mean[mask] - (p_mean[0] * x[mask] ** (-p_mean[1]) + p_mean[2])) ** 2
@@ -68,6 +91,17 @@ def fit_curve(x, y, y_e):
 
 
 def extrapolate(stats_path: str, extra_path: str, bootstrap_path: str, repeats: int):
+    """
+    
+    The gain in prediction accuracy that is enabled by an increase in sample size can be modeled and extrapolated. 
+    This allowed us to, in essence, forecast the prediction performance that we would likely reach at sample sizes orders of magnitude larger than the datasets of today. 
+
+    Args:
+        stats_path: path to the stats
+        extra_path: if stats size is 0, or doesn't exist, create an extra file 
+        bootstrap_path: same as extra_path
+    """
+    
     if os.stat(stats_path).st_size == 0:
         Path(extra_path).touch()
         Path(bootstrap_path).touch()

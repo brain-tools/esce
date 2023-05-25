@@ -1,12 +1,32 @@
+"""
+plot_hps.py
+====================================
+
+"""
 import yaml, glob, os, textwrap
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 
 
+
 def plot(
     stats_filename, output_filename, grid_filename, hyperparameter_scales, model_name, title
 ):
+    """
+    Extract hyperparameter and their performance for the model, 
+    then scale and plot the figure.
+
+    Args:
+        stats_filename: stats file name for stats retrieval
+        output_filename: output plot image name that is stored by the function
+        grid_filename: grid file name for grid retreival 
+        hyperparameter_scales: scale of hyperparameters
+        model_name: name provided to extract hyperparameters from each model 
+        title: title of the figure 
+
+    """
+
     scores = pd.read_csv(stats_filename)
     grid = yaml.safe_load(open(grid_filename, "r"))[model_name]
     hp_names = list(grid.keys())

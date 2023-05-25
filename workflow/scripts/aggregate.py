@@ -1,3 +1,10 @@
+"""
+aggregate.py
+====================================
+
+"""
+
+
 import os
 from pathlib import Path
 
@@ -14,6 +21,11 @@ def aggregate(
     and collect corresponding metrics.
 
     save resulting table to new csv file stats_path
+
+    Args:
+        score_path_list: the path for the input score files
+        stats_path: the path for the output stats csv file
+
     """
 
     df_list = []
@@ -33,8 +45,9 @@ def aggregate(
         ignore_index=True,
     )
 
+    #new: R^2 is the average coefficient of determination
     metric = "r2_val" if "r2_val" in df.columns else "acc_val"
-    idx_best = df.groupby(["n", "s"])[metric].idxmax()
+    idx_best = df.groupby(["n", "s"])[metric].idxmax() #?? what are n and s?
     df.loc[idx_best].to_csv(stats_path, index=False)
 
 

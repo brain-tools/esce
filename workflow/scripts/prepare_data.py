@@ -1,3 +1,9 @@
+"""
+prepare_data.py
+====================================
+
+"""
+
 from pathlib import Path
 
 import numpy as np
@@ -29,6 +35,17 @@ def prepare_data(
     variant: str,
     custom_datasets: dict,
 ):
+    """
+    Prepare features, targets, and covariates in the data.
+
+    Args:
+        out_path: storage path for output data
+        dataset: dataset name for extracting from predifined datasets
+        features_targets_covariates: the string decides which the function prepares
+        variant: a special data type that can contain any kind of data
+        custom_datasets: path for custom datasets 
+    """
+    
     if (dataset, variant) in predefined_datasets:
         data = predefined_datasets[(dataset, variant)]()
     elif features_targets_covariates == "covariates" and variant in [

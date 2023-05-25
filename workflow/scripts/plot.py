@@ -1,3 +1,9 @@
+"""
+plot.py
+====================================
+
+"""
+    
 import yaml, glob, os, textwrap
 import pandas as pd
 import plotly.express as px
@@ -5,7 +11,20 @@ import plotly.graph_objs as go
 import textwrap
 import numpy as np
 
+
 def process_results(available_results):
+    """
+    
+    Process results for plotting.
+
+    Args:
+        available_results: scalar data of available results in the form of stats file list
+
+    Returns:
+
+
+    """
+
     df = pd.DataFrame(available_results, columns=["full_path"])
     df[
         [
@@ -26,11 +45,32 @@ def process_results(available_results):
         .str.replace("/", "_")
         .str.split("_", expand=True)
     )
+
+    #new: figures aggregating over all confound corrections approaches
     df["cni"] = df[["features_cni", "targets_cni", "matching"]].agg("-".join, axis=1)
     return df
 
 
 def plot(stats_file_list, output_filename, color_variable, linestyle_variable, title, max_x=6):
+    """
+
+    Plot five types of figures: 
+    1. individual learning curves for each prediction setup (plot_individually)
+    2. figures aggregating over all feature sets (plot_by_features)
+    3. figures aggregating over all target variables (plot_by_targets)
+    4. figures aggregating over all machine learning models (plot_by_features)
+    5. and figures aggregating over all confound corrections approaches (plot_by_cni)
+
+    Args:
+        stats_file_list: input file list of stats
+        output_filename: the output file name to save the figure in
+        color_variable: custom color variable
+        linestyle_variable: custom linestyle variable
+        title: figure title
+        max_x: extrapolation
+
+    """
+    
     df = process_results(stats_file_list)
 
     data = []

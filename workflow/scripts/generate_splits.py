@@ -1,3 +1,10 @@
+"""
+generat_splits.py
+====================================
+
+"""
+
+    
 import json
 from typing import Dict, Iterable, List, Optional, Tuple, Union
 
@@ -18,7 +25,7 @@ class NpEncoder(json.JSONEncoder):
         return super(NpEncoder, self).default(obj)
 
 
-def generate_random_split(
+def generate_random_split(    
     y: np.ndarray,
     n_train: int,
     n_val: int = 1000,
@@ -27,6 +34,9 @@ def generate_random_split(
     seed: int = 0,
     mask: Optional[np.ndarray] = False,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    #? random vs. matched
+    """
     if mask is False:
         idx_originial = np.arange(len(y))
         idx = np.arange(len(y))
