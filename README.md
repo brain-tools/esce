@@ -14,12 +14,36 @@ In order to use this workflow, you must have either Anaconda or Miniconda instal
 
 For Linux users without conda installed, you can use this [step by step buide](https://dev.to/waylonwalker/installing-miniconda-on-linux-from-the-command-line-4ad7) to install miniconda and mamba for this project.
 
-To avoid incompatible dependencies, we recommend that you start by creating a new conda environment, activate it, first install Snakemake using the following command, then install other packages:
+To avoid incompatible dependencies, we recommend that you start by creating a new conda environment. 
+
+Once you activate the environment, first install Snakemake using the following command, then install other packages:
 
 ```
 conda install -c bioconda snakemake
 ```
 
+If you encounter any issue installing snakemake, try following the [official installation steps] (https://snakemake.readthedocs.io/en/stable/getting_started/installation.html#installation-via-conda):
+
+1. install mamba and other packages
+```
+conda install -n base -c conda-forge mamba
+```
+
+2. activate conda environment and install snakemake in another environment
+```
+$ conda activate base
+$ mamba create -c conda-forge -c bioconda -n snakemake snakemake
+```
+
+3. Once you install snakemake into an isolated software environment, activate it with:
+```
+$ conda activate snakemake
+```
+
+Use the help function if there's any issue:
+```
+$ snakemake --help
+```
 ---
 
 ## Example Workflow
@@ -58,3 +82,19 @@ Here is a visualisation of the workflow
 <img src="resources/dag.png" width="500">
 
 it was created via `snakemake --forceall --rulegraph --configfile example/example_config.yaml | dot -Tpng > dag.png` (requires graphviz)
+
+
+## Documentation
+
+Besides the detailed comments in all `workflow/scripts/` files provided to help you understand the codes, by running the following code, you will be able to read through our html formatted documentation built with `Sphinx`: 
+
+```
+sphinx-build -v -b html docs/ docs/_build/
+```
+
+## Testing
+
+```
+pip install pytest
+python -m pytest -s tests/
+```
