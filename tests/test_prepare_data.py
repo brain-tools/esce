@@ -49,6 +49,9 @@ def test_prepare_data():
 
     assert np.allclose(prepared_data, expected_output), 'features data preparation failed'
 
+    for file_path in [out_path, data_file]:
+        Path(file_path).unlink(missing_ok=True)
+        
     ###
     # Test Case 2: targets
     ###
@@ -70,7 +73,9 @@ def test_prepare_data():
        1., 1., 1., 1., 1., 0., 0., 0., 1., 0., 1., 1., 1., 1., 1.])
 
     assert np.allclose(prepared_data, expected_output), 'targets data preparation failed'
-
+    
+    for file_path in [out_path, data_file]:
+        Path(file_path).unlink(missing_ok=True)
     ###
     # Test Case 3: prepare covariates
     ###

@@ -61,5 +61,5 @@ def test_plot():
 
     assert os.path.exists(output_filename), 'plot hyperparams(acc)\'s plot file doesn\'t exist'
 
-    for file in [stats_filename, grid_filename]: # output_filename
+    for file in [stats_filename, grid_filename, output_filename]
         os.remove(file)
