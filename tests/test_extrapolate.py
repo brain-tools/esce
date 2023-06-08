@@ -1,5 +1,4 @@
 from workflow.scripts.extrapolate import NpEncoder, extrapolate
-
 import os
 import json
 import numpy as np

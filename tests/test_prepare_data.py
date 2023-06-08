@@ -1,5 +1,4 @@
 from workflow.scripts.prepare_data import prepare_data
-
 import numpy as np
 import pandas as pd
 from pathlib import Path

@@ -1,7 +1,5 @@
 from workflow.scripts.plot import process_results, plot
 from workflow.scripts.extrapolate import NpEncoder
-
-
 import os
 import json
 from pathlib import Path
@@ -119,6 +117,6 @@ def test_plot():
 
     assert os.path.exists(output_filename), 'plot function from plot.py failed'
 
-    # for file in [stats_file_list, bootstrap_file_list, output_filename]:
-    #     os.remove(file)
+    for file in [stats_file_list, bootstrap_file_list, output_filename]:
+        os.remove(file)
 
