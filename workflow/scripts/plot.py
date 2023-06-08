@@ -12,6 +12,24 @@ import textwrap
 import numpy as np
 
 
+# rule plot_individually:
+#     input:
+#         sample_complexity_results,
+#     params:
+#         stats=[
+#             "results/{dataset}/statistics/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}.stats.json",
+#         ],
+#         title = config['figure_titles']['individual'],
+#         color_variable=None,
+#         linestyle_variable=None,
+#         max_x=config["extrapolate_to"],
+#     output:
+#         plot="results/{dataset}/plots/individual/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{model}_{grid}.png",
+#     conda:
+#         "envs/environment.yaml"
+#     script:
+#         "scripts/plot.py"
+
 def process_results(available_results):
     """
     
@@ -24,7 +42,7 @@ def process_results(available_results):
         processed dataframe from the inputted scalar data of available results
 
     """
-
+    # "results/{dataset}/statistics/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}.stats.json",
     df = pd.DataFrame(available_results, columns=["full_path"])
     df[
         [
@@ -132,10 +150,10 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
     fig.write_image(output_filename)
 
 
-plot(
-    stats_file_list=snakemake.params.stats,
-    output_filename=snakemake.output.plot,
-    color_variable=snakemake.params.color_variable,
-    linestyle_variable=snakemake.params.linestyle_variable,
-    title=snakemake.params.title,
-    max_x=snakemake.params.max_x,)
+# plot(
+#     stats_file_list=snakemake.params.stats,
+#     output_filename=snakemake.output.plot,
+#     color_variable=snakemake.params.color_variable,
+#     linestyle_variable=snakemake.params.linestyle_variable,
+#     title=snakemake.params.title,
+#     max_x=snakemake.params.max_x,)

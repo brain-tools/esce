@@ -102,10 +102,6 @@ def test_plot():
     with open(bootstrap_file_list[1], "w") as f:
         json.dump({}, f, cls=NpEncoder, indent=0)
 
-    with open(bootstrap_file_list[0]) as f:
-        p = yaml.safe_load(f)
-        print(p, type(p), not p)
-
     output_filename = "tests/plots/plot_output.png"
     color_variable = "features"
     linestyle_variable = "model"
@@ -123,6 +119,6 @@ def test_plot():
 
     assert os.path.exists(output_filename), 'plot function from plot.py failed'
 
-    for file in [stats_file_list, bootstrap_file_list, output_filename]:
-        os.remove(file)
+    # for file in [stats_file_list, bootstrap_file_list, output_filename]:
+    #     os.remove(file)
 
