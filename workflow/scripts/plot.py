@@ -150,10 +150,10 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
     fig.write_image(output_filename)
 
 
-# plot(
-#     stats_file_list=snakemake.params.stats,
-#     output_filename=snakemake.output.plot,
-#     color_variable=snakemake.params.color_variable,
-#     linestyle_variable=snakemake.params.linestyle_variable,
-#     title=snakemake.params.title,
-#     max_x=snakemake.params.max_x,)
+plot(
+    stats_file_list=snakemake.params.stats,
+    output_filename=snakemake.output.plot,
+    color_variable=snakemake.params.color_variable,
+    linestyle_variable=snakemake.params.linestyle_variable,
+    title=snakemake.params.title,
+    max_x=snakemake.params.max_x,)
