@@ -3,3 +3,7 @@ results/
 old/
 slurm-*.out
 results.tar.gz
+tests/__pycache__/
+tests/.pytest_cache/
+tests/data/
+tests/plots/
