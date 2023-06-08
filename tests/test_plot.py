@@ -123,4 +123,6 @@ def test_plot():
 
     assert os.path.exists(output_filename), 'plot function from plot.py failed'
 
+    for file in [stats_file_list, bootstrap_file_list, output_filename]:
+        os.remove(file)
 
