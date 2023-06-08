@@ -4,7 +4,6 @@ generat_splits.py
 
 """
 
-    
 import json
 from typing import Dict, Iterable, List, Optional, Tuple, Union
 
@@ -12,22 +11,7 @@ import numpy as np
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-
-
-class NpEncoder(json.JSONEncoder):
-    """
-    
-    Convert data types for JSON
-
-    """
-    def default(self, obj):
-        if isinstance(obj, np.integer):
-            return int(obj)
-        if isinstance(obj, np.floating):
-            return float(obj)
-        if isinstance(obj, np.ndarray):
-            return obj.tolist()
-        return super(NpEncoder, self).default(obj)
+from workflow.scripts.extrapolate import NpEncoder
 
 
 def generate_random_split(    
