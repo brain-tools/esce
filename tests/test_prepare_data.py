@@ -1,4 +1,5 @@
 from workflow.scripts.prepare_data import prepare_data
+import os
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -24,6 +25,8 @@ def test_prepare_data():
     ###
     # Test Case 1: features
     ###
+
+    # Sample data
     out_path = "tests/data/prepare_data_output_features.npy"
     features_targets_covariates = "features"
 
@@ -54,7 +57,8 @@ def test_prepare_data():
     ###
     # Test Case 2: targets
     ###
-    # Generate dummy data for testing
+
+    # Sample data
     out_path = "tests/data/prepare_data_output_targets.npy"
     features_targets_covariates = "targets"
 
@@ -75,10 +79,12 @@ def test_prepare_data():
     
     for file_path in [out_path, data_file]:
         Path(file_path).unlink(missing_ok=True)
+
     ###
     # Test Case 3: prepare covariates
     ###
-    # Generate dummy data for testing
+
+    # Sampel data
     out_path = "tests/data/prepare_data_output_covariates.npy"
     features_targets_covariates = "covariates"
 
@@ -105,7 +111,7 @@ def test_prepare_data():
 
     assert np.allclose(prepared_data, expected_output), 'covariates data preparation failed'
 
-    
     # Remove temporary files
-    for file_path in [out_path, data_file]:
-        Path(file_path).unlink(missing_ok=True)
+    for file in [out_path, data_file]:
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)

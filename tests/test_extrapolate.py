@@ -77,7 +77,8 @@ def test_extrapolate():
     assert bootstrap_data is None
 
     for file in [stats_path, extra_path, bootstrap_path]:
-      os.remove(file)
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)
 
 
     ###
@@ -116,4 +117,5 @@ def test_extrapolate():
     assert bootstrap_data is None
 
     for file in [stats_path, extra_path, bootstrap_path]:
-        os.remove(file)
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)

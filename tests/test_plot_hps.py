@@ -2,7 +2,6 @@ from workflow.scripts.plot_hps import plot
 import os
 import yaml
 import pandas as pd
-import plotly.graph_objects as go
 
 def test_plot():
     ###
@@ -38,8 +37,9 @@ def test_plot():
     # Verify the existence of the output file
     assert os.path.exists(output_filename), 'plot hyperparams(r2)\'s plot file doesn\'t exist'
 
-    for file in [stats_filename]:
-        os.remove(file)
+    for file in [stats_filename, output_filename]:
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)
 
     ###
     # Test case 2: there is no r2_value
@@ -60,5 +60,6 @@ def test_plot():
 
     assert os.path.exists(output_filename), 'plot hyperparams(acc)\'s plot file doesn\'t exist'
 
-    for file in [stats_filename, grid_filename]: #, output_filename]:
-        os.remove(file)
+    for file in [stats_filename, grid_filename, output_filename]:
+        if(os.path.exists(file) and os.path.isfile(file)):
+              os.remove(file)

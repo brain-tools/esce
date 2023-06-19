@@ -10,7 +10,7 @@ def test_aggregate():
     stats_file = 'tests/data/aggregate_output.csv'
 
     # # # 
-    # Case 1: Generate sample data for score files: for r2_val
+    # Test case 1: Generate sample data for score files: for r2_val
     # # #
     sample_data = [
         {
@@ -116,12 +116,13 @@ def test_aggregate():
 
     assert result_df.equals(expected_df), "Expected best n, s aggregated combination calculated incorrectly for r2_val"
 
-    # Clean up temporary files
+    # Remove temporary files
     for file in score_files + [stats_file]:
-        os.remove(file)
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)
 
     # # # 
-    # Case 2: Generate sample data for score files: for r2_val
+    # Test case 2: Generate sample data for score files: for r2_val
     # # #
     sample_data_acc = [
         {
@@ -211,11 +212,12 @@ def test_aggregate():
 
     # Clean up temporary files
     for file in score_files + [stats_file]:
-        os.remove(file)
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)
 
 
     # # # 
-    # Case 3: Check empty file is always created to run Snakemake workflow smoothly
+    # Test case 3: Check empty file is always created to run Snakemake workflow smoothly
     # # # 
     sample_data_empty = [
         {
@@ -235,4 +237,5 @@ def test_aggregate():
     assert os.path.exists(stats_file), "Empty file not created for Snakemake workflow when empty csvs were inputted"
 
     for file in score_files + [stats_file]:
-        os.remove(file)
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)

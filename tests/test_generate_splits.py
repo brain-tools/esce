@@ -122,8 +122,9 @@ def test_write_splitfile():
     assert "average_matching_score" not in split_dict
 
     # Remove temporary files
-    for path in [split_path]:
-        os.remove(path)
+    for file in [split_path]:
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)
 
 
     ###
@@ -159,5 +160,6 @@ def test_write_splitfile():
     assert split_dict["average_matching_score"] == expected_dict["average_matching_score"]
 
     # Remove temporary files
-    for path in [features_path, targets_path, matching_path, split_path]:
-        os.remove(path)
+    for file in [features_path, targets_path, matching_path, split_path]:
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)

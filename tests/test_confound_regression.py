@@ -2,7 +2,7 @@ from workflow.scripts.confound_regression import confound_regression
 import numpy as np
 import os
 
-def test_confound_regression(tmp_path):
+def test_confound_regression():
     # Create temporary files for testing
     data_path = "tests/data/confound_regression_features.npy"
     confounds_path = "tests/data/confound_regression_confounds.npy"
@@ -29,5 +29,7 @@ def test_confound_regression(tmp_path):
     assert np.array_equal(data_corrected, expected_corrected), 'correction made regarding confounders is incorrect'
 
     files_to_remove = [data_path, confounds_path, out_path]
-    for file_path in files_to_remove:
-        os.remove(file_path)
+
+    for file in files_to_remove:
+        if(os.path.exists(file) and os.path.isfile(file)):
+            os.remove(file)

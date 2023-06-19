@@ -2,14 +2,8 @@ from workflow.scripts.plot import process_results, plot
 from workflow.scripts.extrapolate import NpEncoder
 import os
 import json
-from pathlib import Path
-import yaml
-import textwrap
 import pandas as pd
-import numpy as np
-import plotly.express as px
-import plotly.graph_objects as go
-from tempfile import NamedTemporaryFile
+from pathlib import Path
 
 def test_process_results():
 
@@ -117,6 +111,7 @@ def test_plot():
 
     assert os.path.exists(output_filename), 'plot function from plot.py failed'
 
-    for file in [stats_file_list, bootstrap_file_list, output_filename]:
-        os.remove(file)
+    for file in stats_file_list + bootstrap_file_list + [output_filename]:
+        if(os.path.exists(file) and os.path.isfile(file)):
+              os.remove(file)
 
