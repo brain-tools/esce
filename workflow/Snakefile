@@ -63,8 +63,12 @@ rule prepare_features_or_targets:
         custom_datasets=config["custom_datasets"],
     conda:
         "envs/environment.yaml"
-    script:
-        "scripts/prepare_data.py"
+    shell:
+        """
+        python scripts/prepare_data.py --dataset {wildcards.dataset}    \
+        --features_targets_covariates {wildcards.features_or_targets}   \
+        --name {wildcards.name} --custom_datasets {params.custom_datasets}   
+        """
 
 
 rule prepare_covariates:
@@ -74,8 +78,12 @@ rule prepare_covariates:
         custom_datasets=config["custom_datasets"],
     conda:
         "envs/environment.yaml"
-    script:
-        "scripts/prepare_data.py"
+    shell:
+        """
+        python scripts/prepare_data.py --dataset {wildcards.dataset}        \
+        --features_targets_covariates "covariates"  --name {wildcards.name} \
+        --custom_datasets {params.custom_datasets}  
+        """
 
 
 rule confound_regression:
