@@ -62,19 +62,3 @@ if __name__ == "__main__":
         snakemake.wildcards.name,
         snakemake.params.custom_datasets,
     )
-
-# if __name__ == "__main__":
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument("--name", type=str)
-#     parser.add_argument("--dataset", type=str)
-#     parser.add_argument("--features_targets_covariates", type=str)
-#     parser.add_argument("--custom_datasets", type=dict)
-#     args = parser.parse_args()
-#
-#     prepare_data(
-#         snakemake.output.npy,
-#         args.dataset,
-#         args.features_targets_covariates,
-#         args.name,
-#         args.custom_datasets
-#     )
