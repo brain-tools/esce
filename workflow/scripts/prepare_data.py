@@ -53,16 +53,16 @@ def prepare_data(
     np.save(out_path, data)
 
 
-
-prepare_data(
-    snakemake.output.npy,
-    snakemake.wildcards.dataset,
-    snakemake.wildcards.features_or_targets
-    if hasattr(snakemake.wildcards, "features_or_targets")
-    else "covariates",
-    snakemake.wildcards.name,
-    snakemake.params.custom_datasets,
-)
+if __name__ == "__main__":
+    prepare_data(
+        snakemake.output.npy,
+        snakemake.wildcards.dataset,
+        snakemake.wildcards.features_or_targets
+        if hasattr(snakemake.wildcards, "features_or_targets")
+        else "covariates",
+        snakemake.wildcards.name,
+        snakemake.params.custom_datasets,
+    )
 
 # if __name__ == "__main__":
 #     parser = argparse.ArgumentParser()
