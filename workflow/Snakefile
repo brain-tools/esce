@@ -54,8 +54,6 @@ rule all:
         by_model_plots,
         by_cni_plots,
         hp_plots,
-
-
 rule prepare_features_or_targets:
     output:
         npy="results/{dataset}/{features_or_targets}/{name}_none.npy",
@@ -63,12 +61,8 @@ rule prepare_features_or_targets:
         custom_datasets=config["custom_datasets"],
     conda:
         "envs/environment.yaml"
-    shell:
-        """
-        python scripts/prepare_data.py --dataset {wildcards.dataset}    \
-        --features_targets_covariates {wildcards.features_or_targets}   \
-        --name {wildcards.name} --custom_datasets {params.custom_datasets}   
-        """
+    script:
+        "scripts/prepare_data.py"
 
 
 rule prepare_covariates:
@@ -78,12 +72,42 @@ rule prepare_covariates:
         custom_datasets=config["custom_datasets"],
     conda:
         "envs/environment.yaml"
-    shell:
-        """
-        python scripts/prepare_data.py --dataset {wildcards.dataset}        \
-        --features_targets_covariates "covariates"  --name {wildcards.name} \
-        --custom_datasets {params.custom_datasets}  
-        """
+    script:
+        "scripts/prepare_data.py"
+
+
+#
+# rule prepare_features_or_targets:
+#     output:
+#         npy="results/{dataset}/{features_or_targets}/{name}_none.npy",
+#     params:
+#         custom_datasets=config["custom_datasets"],
+#         python_file = workflow.source_path("scripts/prepare_data.py")
+#     # TODO: need to fix this so that it doesn't confuse paths with the ones from thesis_modalities
+#     conda:
+#         "envs/environment.yaml"
+#     shell:
+#         """
+#         python {params.python_file} --dataset {wildcards.dataset}    \
+#         --features_targets_covariates {wildcards.features_or_targets}   \
+#         --name {wildcards.name} --custom_datasets {params.custom_datasets}
+#         """
+#
+#
+# rule prepare_covariates:
+#     output:
+#         npy="results/{dataset}/covariates/{name}.npy",
+#     params:
+#         custom_datasets=config["custom_datasets"],
+#         python_file= workflow.source_path("scripts/prepare_data.py")
+#     conda:
+#         "envs/environment.yaml"
+#     shell:
+#         """
+#         python {params.python_file} --dataset {wildcards.dataset}        \
+#         --features_targets_covariates "covariates"  --name {wildcards.name} \
+#         --custom_datasets {params.custom_datasets}
+#         """
 
 
 rule confound_regression:
