@@ -31,7 +31,7 @@ def confound_regression(data_path: str, confounds_path: str, out_path: str):
     
     np.save(out_path, data_corrected)
 
-
-confound_regression(
-    snakemake.input.features, snakemake.input.confounds, snakemake.output.features
-)
+if __name__ == "__main__":
+    confound_regression(
+        snakemake.input.features, snakemake.input.confounds, snakemake.output.features
+    )

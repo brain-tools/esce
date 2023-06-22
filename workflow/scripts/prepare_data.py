@@ -49,7 +49,6 @@ def prepare_data(
     if features_targets_covariates == "targets":
         data = data.reshape(-1)
 
-    print(__name__)
     np.save(out_path, data)
 
 

@@ -37,5 +37,5 @@ def aggregate(
     idx_best = df.groupby(["n", "s"])[metric].idxmax()
     df.loc[idx_best].to_csv(stats_path, index=False)
 
-
-aggregate(snakemake.input.scores, snakemake.output.scores)
+if __name__ == "__main__":
+    aggregate(snakemake.input.scores, snakemake.output.scores)
