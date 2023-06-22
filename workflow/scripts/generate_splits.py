@@ -216,7 +216,7 @@ def write_splitfile(
 
 
 if __name__ == "__main__":
-    n_train = int(snakemakeSimplemm.wildcards.samplesize)
+    n_train = int(snakemake.wildcards.samplesize)
     n_val = n_test = min(
         round(n_train * snakemake.params.val_test_frac), snakemake.params.val_test_max
     ) if snakemake.params.val_test_max else round(n_train * snakemake.params.val_test_frac)
