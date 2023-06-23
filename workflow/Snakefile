@@ -100,6 +100,8 @@ rule split:
         stratify=config["stratify"],
     output:
         split="results/{dataset}/splits/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}.json",
+    resources:
+        mem_mb=80000,
     conda:
         "envs/environment.yaml"
     script:
@@ -120,6 +122,8 @@ rule fit:
         ),
     output:
         scores="results/{dataset}/fits/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_{grid}.csv",
+    resources:
+        mem_mb=80000,
     conda:
         "envs/environment.yaml"
     script:
@@ -135,6 +139,8 @@ rule aggregate:
         ),
     output:
         scores="results/{dataset}/scores/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}.csv",
+    resources:
+        mem_mb=20000,
     conda:
         "envs/environment.yaml"
     script:
@@ -151,6 +157,8 @@ rule extrapolate:
         bootstraps="results/{dataset}/statistics/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}.bootstrap.json",
     conda:
         "envs/environment.yaml"
+    resources:
+        mem_mb=20000,
     script:
         "scripts/extrapolate.py"
 
