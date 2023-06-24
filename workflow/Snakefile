@@ -101,7 +101,7 @@ rule split:
     output:
         split="results/{dataset}/splits/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}.json",
     resources:
-        mem_mb=80000,
+        mem_mb=100000,
     conda:
         "envs/environment.yaml"
     script:
@@ -123,7 +123,7 @@ rule fit:
     output:
         scores="results/{dataset}/fits/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_{grid}.csv",
     resources:
-        mem_mb=80000,
+        mem_mb=100000,
     conda:
         "envs/environment.yaml"
     script:
