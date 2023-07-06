@@ -101,7 +101,9 @@ rule split:
     output:
         split="results/{dataset}/splits/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}.json",
     resources:
-        mem_mb=100000,
+        mem_mb=200000,
+    benchmark:
+        repeat("benchmarks/{dataset}/split{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_benchmark.txt",2)
     conda:
         "envs/environment.yaml"
     script:
@@ -123,7 +125,9 @@ rule fit:
     output:
         scores="results/{dataset}/fits/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_{grid}.csv",
     resources:
-        mem_mb=100000,
+        mem_mb=200000,
+    benchmark:
+        repeat("benchmarks/{dataset}/{model}_fit_{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_{grid}_benchmark.txt",2)
     conda:
         "envs/environment.yaml"
     script:
@@ -140,7 +144,9 @@ rule aggregate:
     output:
         scores="results/{dataset}/scores/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}.csv",
     resources:
-        mem_mb=20000,
+        mem_mb=100000,
+    benchmark:
+        repeat("benchmarks/{dataset}/aggregate{model}_{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}_benchmark.txt",2),
     conda:
         "envs/environment.yaml"
     script:
