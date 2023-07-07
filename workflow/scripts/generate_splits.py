@@ -14,7 +14,7 @@ from sklearn.preprocessing import StandardScaler
 from workflow.scripts.extrapolate import NpEncoder
 
 
-def generate_random_split(    
+def generate_random_split(
     y: np.ndarray,
     n_train: int,
     n_val: int = 1000,
@@ -25,8 +25,8 @@ def generate_random_split(
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
 
-    Standard random split 
-    
+    Standard random split
+
     Arguments:
         y: dataset in the format of a numpy array
         n_train: size of the training set
@@ -35,7 +35,7 @@ def generate_random_split(
         do_stratify: a boolean value to flag whether stratification should be performed while splitting
         seed: random seed for splitting
         mask: the mask for all the complete data entries
-    
+
     Returns:
         split: a dictionary of the index of the splitted(train/val/test) dataset and the parameters including sample size, seed, and whether stratification is performed
 
@@ -88,7 +88,7 @@ def generate_matched_split(
 
     In clinical experiments, the optimal case is to only have the control group being the exact copy (eg. studying the one different characteristic of a twin) of the subject being studied (patient group).
     However, it is not possible in the real world, thus, we want to calculate the best match score of the control group for each subject to find the best control group candidates.
-    
+
     It is worth noting that:
         1: patient group
         0: control group
@@ -115,31 +115,41 @@ def generate_matched_split(
         n_test // 2,
         do_stratify,
         seed,
-        np.logical_and(mask, y == 1), # 1: patient group
+        np.logical_and(mask, y == 1),  # 1: patient group
     )
     idx_all = np.arange(len(y))
 
-    mask[y == 1] = False # mask to exclude all patients from all participants
+    mask[y == 1] = False  # mask to exclude all patients from all participants
     assert np.isfinite(match[mask]).all()
 
     match = StandardScaler().fit_transform(match)
     matching_scores = []
-    for idx_set in ["idx_train", "idx_val", "idx_test"]: # for each set
-        control_group = [] # generate a control group
-        for idx in split[idx_set]: # for each patient
-            idx_pool = idx_all[mask] # the pool of everyone who's not patients (= potential candidates for control group)
-            scores = (match[idx_pool] - match[idx]) ** 2 # calculate score from (matching varialbe for everyone in the pool - matchin var of patients)**2
-            scores = np.sum(scores, axis=1) # sum up the characteristic scores
+    for idx_set in ["idx_train", "idx_val", "idx_test"]:  # for each set
+        control_group = []  # generate a control group
+        for idx in split[idx_set]:  # for each patient
+            idx_pool = idx_all[
+                mask
+            ]  # the pool of everyone who's not patients (= potential candidates for control group)
+            scores = (
+                match[idx_pool] - match[idx]
+            ) ** 2  # calculate score from (matching varialbe for everyone in the pool - matchin var of patients)**2
+            scores = np.sum(scores, axis=1)  # sum up the characteristic scores
 
-            t = random_state.permutation(np.column_stack((scores, idx_pool))) # shuffle to run on random seed in case we always match only with the first participant in the pool --> to take care of the ties (same characteristics)
-            t_idx = np.nanargmin(t.T[0]) # take index of the person with the smallest score (matches the best, approximation of the optimal control invidivual)
+            t = random_state.permutation(
+                np.column_stack((scores, idx_pool))
+            )  # shuffle to run on random seed in case we always match only with the first participant in the pool --> to take care of the ties (same characteristics)
+            t_idx = np.nanargmin(
+                t.T[0]
+            )  # take index of the person with the smallest score (matches the best, approximation of the optimal control invidivual)
 
             score_match = t.T[0][t_idx]
             matching_scores.append(score_match)
 
             idx_match = t.T[1][t_idx].astype(int)
             control_group.append(idx_match)
-            mask[idx_match] = False # mask out the approximate best control group candidate (without replacement)
+            mask[
+                idx_match
+            ] = False  # mask out the approximate best control group candidate (without replacement)
 
             assert mask_orig[idx_match], (scores, t, t[t_idx], score_match, idx_match)
 
@@ -155,8 +165,8 @@ def write_splitfile(
     features_path,
     targets_path,
     split_path,
-    sampling_path, # the path to the matching variable table (e.g. age, gender, ed level)
-    sampling_type, # matching options: [none, balanced, ]
+    sampling_path,  # the path to the matching variable table (e.g. age, gender, ed level)
+    sampling_type,  # matching options: [none, balanced, ]
     n_train,
     n_val,
     n_test,
@@ -190,7 +200,7 @@ def write_splitfile(
     n_classes = len(np.unique(y[xy_mask]))
     idx_all = np.arange(len(y))
 
-    # if stratify flag is on but we have too many classes to perform stratification, we don't do it 
+    # if stratify flag is on but we have too many classes to perform stratification, we don't do it
     stratify = True if stratify and (n_classes <= 10) else False
 
     ###
@@ -206,12 +216,14 @@ def write_splitfile(
         )
         xy_mask[[i for i in idx_all if i not in idx_undersampled]] = False
     # if sampling option points to a path with data, we do the matching
-    elif len(matching) == len(y) and len(matching.shape) > 1: # if there are more than 1 matching variable (e.g. age, gender, ed level)
+    elif (
+        len(matching) == len(y) and len(matching.shape) > 1
+    ):  # if there are more than 1 matching variable (e.g. age, gender, ed level)
         assert n_classes == 2
         # preparing for matching by excluding the participants with NaN values in the matching variables
         m_mask = np.all(np.isfinite(matching), 1)
         xy_mask = np.logical_and(xy_mask, m_mask)
-    
+
     # preparing for matching when there's only one matching variable
     elif len(matching) == len(y) and len(matching.shape) == 1:
         assert n_classes == 2
@@ -221,7 +233,9 @@ def write_splitfile(
     else:
         raise Exception("invalid sampling file")
 
-    if matching is False and sum(xy_mask) > n_train + n_val + n_test: # if matching is 'none' or 'balanced', random splitting
+    if (
+        matching is False and sum(xy_mask) > n_train + n_val + n_test
+    ):  # if matching is 'none' or 'balanced', random splitting
         split_dict = generate_random_split(
             y=y,
             n_train=n_train,
@@ -231,7 +245,9 @@ def write_splitfile(
             mask=xy_mask,
             seed=seed,
         )
-    elif sum(xy_mask[y == 1]) > n_train // 2 + n_val // 2 + n_test // 2: # if special matching is flagged
+    elif (
+        sum(xy_mask[y == 1]) > n_train // 2 + n_val // 2 + n_test // 2
+    ):  # if special matching is flagged
         split_dict = generate_matched_split(
             y=y,
             match=matching,
@@ -242,10 +258,10 @@ def write_splitfile(
             mask=xy_mask,
             seed=seed,
         )
-    else: # if not enough sample for previous sampling options, flag error
+    else:  # if not enough sample for previous sampling options, flag error
         split_dict = {"error": "insufficient samples"}
 
-    if not "error" in split_dict: # doulbe checking all values are valid
+    if not "error" in split_dict:  # doulbe checking all values are valid
         assert np.isfinite(x[split_dict["idx_train"]]).all()
         assert np.isfinite(y[split_dict["idx_train"]]).all()
 

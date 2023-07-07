@@ -9,9 +9,13 @@ import plotly.express as px
 import plotly.graph_objs as go
 
 
-
 def plot(
-    stats_filename, output_filename, grid_filename, hyperparameter_scales, model_name, title
+    stats_filename,
+    output_filename,
+    grid_filename,
+    hyperparameter_scales,
+    model_name,
+    title,
 ):
     """
 
@@ -20,10 +24,10 @@ def plot(
     Args:
         stats_filename: stats file name for stats retrieval
         output_filename: output plot image name that is stored by the function
-        grid_filename: grid file name for grid retreival 
+        grid_filename: grid file name for grid retreival
         hyperparameter_scales: scale of hyperparameters
-        model_name: name provided to extract hyperparameters from each model 
-        title: title of the figure 
+        model_name: name provided to extract hyperparameters from each model
+        title: title of the figure
 
     """
 
@@ -49,7 +53,9 @@ def plot(
     )
 
     for i, v in enumerate(hp_names):
-        if v in hyperparameter_scales: # adds indicator for the scale for the highest and lowest hyperparam
+        if (
+            v in hyperparameter_scales
+        ):  # adds indicator for the scale for the highest and lowest hyperparam
             fig.add_hline(y=min(grid[v]), line_dash="dot", col=i + 1)
             fig.add_hline(y=max(grid[v]), line_dash="dot", col=i + 1)
             if hyperparameter_scales[v] == "log":

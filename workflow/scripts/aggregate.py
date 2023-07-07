@@ -16,7 +16,7 @@ def aggregate(
     stats_path: str,
 ):
     """
-    
+
     For each score file in score_path_list,
     identify best performing hyperparameter combination on validation set
     and collect corresponding metrics.

@@ -1,4 +1,9 @@
-from workflow.scripts.fit_model import fit ,ClassifierModel, RegressionModel, get_existing_scores
+from workflow.scripts.fit_model import (
+    fit,
+    ClassifierModel,
+    RegressionModel,
+    get_existing_scores,
+)
 import os
 import json
 import pandas as pd
@@ -6,7 +11,13 @@ import numpy as np
 from pathlib import Path
 from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import Ridge, RidgeClassifier
-from sklearn.metrics import accuracy_score, f1_score, r2_score, mean_absolute_error, mean_squared_error
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    r2_score,
+    mean_absolute_error,
+    mean_squared_error,
+)
 
 
 def test_fit():
@@ -14,9 +25,12 @@ def test_fit():
     targets_path = "tests/data/fit_model-fit_targets.npy"
     split_path = "tests/data/fit_model-fit_split.json"
     scores_path = "tests/data/fit_model-fit_scores.csv"
-    model_name = "majority-classifier" # "ridge-cls", "ridge-reg"
+    model_name = "majority-classifier"  # "ridge-cls", "ridge-reg"
     grid_path = "config/grids/default.yaml"
-    existing_scores_path_list = ["tests/data/fit_model-fit_existing_scores1.csv", "tests/data/fit_model-fit_existing_scores2.csv"]
+    existing_scores_path_list = [
+        "tests/data/fit_model-fit_existing_scores1.csv",
+        "tests/data/fit_model-fit_existing_scores2.csv",
+    ]
 
     # Sample data
     split_data = {
@@ -39,8 +53,7 @@ def test_fit():
         "param2": ["a", "b", "c"],
         "score": [0.1, 0.2, 0.3],
         "n": [100, 200, 300],
-        "s": [1, 2, 3]
-
+        "s": [1, 2, 3],
     }
     existing_scores_df = pd.DataFrame(existing_scores_data)
     for path in existing_scores_path_list:
@@ -56,7 +69,7 @@ def test_fit():
         existing_scores_path_list,
     )
 
-    assert os.path.isfile(str(scores_path)), 'scores file doesn\'t exist'
+    assert os.path.isfile(str(scores_path)), "scores file doesn't exist"
     scores_df = pd.read_csv(str(scores_path))
 
     assert len(scores_df) == 1  # No. of parameter combinations
@@ -65,17 +78,21 @@ def test_fit():
     assert "score" in scores_df.columns
     assert "n" in scores_df.columns
     assert "s" in scores_df.columns
-    assert scores_df["n"].unique() == [100], '8'
-    assert scores_df["s"].unique() == [1], '0'
+    assert scores_df["n"].unique() == [100], "8"
+    assert scores_df["s"].unique() == [1], "0"
 
     # Remove temporary files
-    for file in [features_path, targets_path, split_path, scores_path] + existing_scores_path_list:
-        if(os.path.exists(file) and os.path.isfile(file)):
+    for file in [
+        features_path,
+        targets_path,
+        split_path,
+        scores_path,
+    ] + existing_scores_path_list:
+        if os.path.exists(file) and os.path.isfile(file):
             os.remove(file)
 
 
 class TestClassifierModel(ClassifierModel):
-
     # to avoid PytestCollectionWarning
     __test__ = False
 
@@ -88,7 +105,6 @@ class TestClassifierModel(ClassifierModel):
         y_val,
         y_test,
     ):
-    
         metrics = {
             "acc_train": accuracy_score(y_train, y_hat_train),
             "acc_val": accuracy_score(y_val, y_hat_val),
@@ -99,13 +115,17 @@ class TestClassifierModel(ClassifierModel):
         }
         return metrics
 
+
 def test_DummyClassifierModel():
     num_samples = 100
     num_features = 10
     x = np.random.randn(num_samples, num_features)
     y = np.random.randint(0, 2, size=num_samples)
 
-    model = TestClassifierModel(lambda **kwargs: DummyClassifier(strategy="most_frequent", **kwargs), "majority classifier")
+    model = TestClassifierModel(
+        lambda **kwargs: DummyClassifier(strategy="most_frequent", **kwargs),
+        "majority classifier",
+    )
 
     idx_train = np.arange(80)
     idx_val = np.arange(80, 90)
@@ -121,6 +141,7 @@ def test_DummyClassifierModel():
     assert "f1_test" in metrics
 
     del model
+
 
 def test_RidgeClassifierModel():
     num_samples = 100
@@ -128,7 +149,9 @@ def test_RidgeClassifierModel():
     x = np.random.randn(num_samples, num_features)
     y = np.random.randint(0, 2, size=num_samples)
 
-    model = TestClassifierModel(lambda **kwargs: RidgeClassifier(**kwargs), "ridge classifier")
+    model = TestClassifierModel(
+        lambda **kwargs: RidgeClassifier(**kwargs), "ridge classifier"
+    )
 
     idx_train = np.arange(80)
     idx_val = np.arange(80, 90)
@@ -145,8 +168,8 @@ def test_RidgeClassifierModel():
 
     del model
 
-class TestRegressionModel(RegressionModel):
 
+class TestRegressionModel(RegressionModel):
     # To avoid PytestCollectionWarning
     __test__ = False
 
@@ -159,7 +182,6 @@ class TestRegressionModel(RegressionModel):
         y_val,
         y_test,
     ):
-    
         metrics = {
             "r2_train": r2_score(y_train, y_hat_train),
             "r2_val": r2_score(y_val, y_hat_val),
@@ -172,6 +194,7 @@ class TestRegressionModel(RegressionModel):
             "mse_test": mean_squared_error(y_test, y_hat_test),
         }
         return metrics
+
 
 def test_RegressionModel():
     num_samples = 100
@@ -201,12 +224,14 @@ def test_RegressionModel():
 
 
 def test_get_existing_scores():
-    
     ###
     # Test case 1: existing score files with values
     ###
     # Create sample existing scores files
-    existing_scores_paths = ["tests/data/fit_model-existing_scores1.csv", "tests/data/fit_model-existing_scores2.csv"]
+    existing_scores_paths = [
+        "tests/data/fit_model-existing_scores1.csv",
+        "tests/data/fit_model-existing_scores2.csv",
+    ]
     existing_scores1 = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
     existing_scores1.to_csv(existing_scores_paths[0], index=None)
     existing_scores2 = pd.DataFrame({"col1": [5, 6], "col2": [7, 8]})
@@ -228,5 +253,5 @@ def test_get_existing_scores():
 
     # Remove temporary files
     for file in existing_scores_paths:
-        if(os.path.exists(file) and os.path.isfile(file)):
+        if os.path.exists(file) and os.path.isfile(file):
             os.remove(file)
