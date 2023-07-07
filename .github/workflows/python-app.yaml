@@ -29,11 +29,11 @@ jobs:
         uname -a
         df -h
         ulimit -a
-    - name: Set up Mamba
+    - name: Set up Mamba and Snakemake
       uses: conda-incubator/setup-miniconda@v2
       with:
         mamba-version: "*"
-        channels: conda-forge,defaults
+        channels: conda-forge,bioconda, defaults
         channel-priority: true
         activate-environment: base
         environment-file: workflow/envs/environment.yaml
@@ -48,7 +48,6 @@ jobs:
         conda config --show
         printenv | sort
 
-    #
     - name: Install auto-fixing linter
       run: pip install black flake8
 
@@ -65,6 +64,7 @@ jobs:
       # conda setup requires this special shell
       shell: bash -l {0}
       run: |
+        conda activate snakemake
         pip install pytest pytest-cov
         pytest tests -r a --cov=esce --cov-report=xml
 
