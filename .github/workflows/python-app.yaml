@@ -48,6 +48,18 @@ jobs:
         conda config --show
         printenv | sort
 
+    - name: Build documentation
+      run: |
+        pip install sphinx>=1.8 sphinx_rtd_theme sphinx-copybutton
+        sphinx-build -M html docs docs/build -qW
+        sphinx-build -M html docs docs/build -Eqn -b coverage
+        if [[ -s docs/build/html/python.txt ]]
+        then
+          echo
+          echo "Error: Documentation missing:"
+          echo
+          cat docs/build/html/python.txt
+          exit 1
     # auto-fixing lint
     # - name: Install auto-fixing linter
     #   run: pip install black flake8
@@ -61,7 +73,7 @@ jobs:
     #     flake8: true
     #     flake8_auto_fix: false
 
-      ## Alternatively: normal linting, stop the build if there are Python syntax errors
+    ## Alternatively: normal linting, stop the build if there are Python syntax errors
     - name: Run pytest
       # conda setup requires this special shell
       shell: bash -l {0}
@@ -79,18 +91,6 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-    - name: Build documentation
-      run: |
-        pip install sphinx>=1.8 sphinx_rtd_theme
-        sphinx-build -M html docs docs/build -qW
-        sphinx-build -M html docs docs/build -Eqn -b coverage
-        if [[ -s docs/build/html/python.txt ]]
-        then
-          echo
-          echo "Error: Documentation missing:"
-          echo
-          cat docs/build/html/python.txt
-          exit 1
     
     # - name: Run example workflow
     #   shell: bash -l {0}
