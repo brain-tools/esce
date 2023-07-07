@@ -33,20 +33,29 @@ jobs:
       uses: conda-incubator/setup-miniconda@v2
       with:
         mamba-version: "*"
-        channels: conda-forge,bioconda, defaults
+        channels: conda-forge, bioconda, defaults
         channel-priority: true
         activate-environment: base
-        environment-file: workflow/envs/environment.yaml
     - name: Install packages
       shell: bash -el {0}
       run: |
-        mamba create -c conda-forge -c bioconda -n snakemake snakemake
-        conda activate snakemake
         conda info
         conda list
         conda config --show-sources
         conda config --show
         printenv | sort
+
+    - name: Run pytest
+      # conda setup requires this special shell
+      shell: bash -l {0}
+      run: |
+        pip install pytest pytest-cov
+        conda install -n base -c conda-forge mamba
+        conda activate base
+        mamba create -c conda-forge -c bioconda -n snakemake snakemake
+        mamba activate snakemake
+        conda install environment.yaml
+        pytest tests -r a --cov=esce --cov-report=xml
 
     - name: Build documentation
       run: |
@@ -73,19 +82,7 @@ jobs:
     #     flake8: true
     #     flake8_auto_fix: false
 
-    ## Alternatively: normal linting, stop the build if there are Python syntax errors
-    - name: Run pytest
-      # conda setup requires this special shell
-      shell: bash -l {0}
-      run: |
-        pip install pytest pytest-cov
-        conda install -n base -c conda-forge mamba
-        conda activate base
-        mamba create -c conda-forge -c bioconda -n snakemake snakemake
-        conda activate snakemake
-        conda install environment.yaml
-        pytest tests -r a --cov=esce --cov-report=xml
-        
+    ## Alternatively: normal linting, stop the build if there are Python syntax errors       
     - name: Lint with flake8
       run: |
         pip install flake8==4.0.1
