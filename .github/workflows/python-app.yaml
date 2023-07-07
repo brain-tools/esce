@@ -29,22 +29,22 @@ jobs:
         uname -a
         df -h
         ulimit -a
-    # - name: Set up Mamba and Snakemake
-    #   uses: conda-incubator/setup-miniconda@v2
-    #   with:
-    #     mamba-version: "*"
-    #     channels: conda-forge, bioconda, defaults
-    #     channel-priority: true
-    #     activate-environment: base
-    #     environment-file: workflow/envs/environment.yaml
-    # - name: Install packages
-    #   shell: bash -el {0}
-    #   run: |
-    #     conda info
-    #     conda list
-    #     conda config --show-sources
-    #     conda config --show
-    #     printenv | sort
+    - name: Set up Mamba and Snakemake
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        mamba-version: "*"
+        channels: conda-forge, bioconda, defaults
+        channel-priority: true
+        activate-environment: base
+        environment-file: workflow/envs/environment.yaml
+    - name: Install packages
+      shell: bash -el {0}
+      run: |
+        conda info
+        conda list
+        conda config --show-sources
+        conda config --show
+        printenv | sort
     
     # - name: Run pytest
     #   # conda setup requires this special shell
