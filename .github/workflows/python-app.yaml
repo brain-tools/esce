@@ -79,6 +79,8 @@ jobs:
       shell: bash -l {0}
       run: |
         pip install pytest pytest-cov
+        conda install -n base -c conda-forge mamba
+        conda activate base
         mamba create -c conda-forge -c bioconda -n snakemake snakemake
         conda activate snakemake
         conda install environment.yaml
