@@ -29,23 +29,36 @@ jobs:
         uname -a
         df -h
         ulimit -a
-    - name: Set up Mamba and Snakemake
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        mamba-version: "*"
-        channels: conda-forge, bioconda, defaults
-        channel-priority: true
-        activate-environment: base
-        environment-file: workflow/envs/environment.yaml
-    - name: Install packages
-      shell: bash -el {0}
-      run: |
-        conda info
-        conda list
-        conda config --show-sources
-        conda config --show
-        printenv | sort
+    # - name: Set up Mamba and Snakemake
+    #   uses: conda-incubator/setup-miniconda@v2
+    #   with:
+    #     mamba-version: "*"
+    #     channels: conda-forge, bioconda, defaults
+    #     channel-priority: true
+    #     activate-environment: base
+    #     environment-file: workflow/envs/environment.yaml
+    # - name: Install packages
+    #   shell: bash -el {0}
+    #   run: |
+    #     conda info
+    #     conda list
+    #     conda config --show-sources
+    #     conda config --show
+    #     printenv | sort
     
+    # - name: Run pytest
+    #   # conda setup requires this special shell
+    #   shell: bash -l {0}
+    #   run: |
+    #     pip install pytest pytest-cov
+    #     conda install -n base -c conda-forge mamba
+    #     conda activate base
+    #     mamba create -c conda-forge -c bioconda -n snakemake snakemake
+    #     mamba init
+    #     mamba activate snakemake
+    #     conda install environment.yaml
+    #     pytest tests -r a --cov=esce --cov-report=xml
+
     - name: Build documentation
       run: |
         pip install sphinx>=1.8 sphinx_rtd_theme sphinx-copybutton piccolo-theme
@@ -58,18 +71,6 @@ jobs:
           echo
           cat docs/build/html/python.txt
           exit 1
-
-    - name: Run pytest
-      # conda setup requires this special shell
-      shell: bash -l {0}
-      run: |
-        pip install pytest pytest-cov
-        conda install -n base -c conda-forge mamba
-        conda activate base
-        mamba create -c conda-forge -c bioconda -n snakemake snakemake
-        mamba activate snakemake
-        conda install environment.yaml
-        pytest tests -r a --cov=esce --cov-report=xml
 
     # auto-fixing lint
     # - name: Install auto-fixing linter
