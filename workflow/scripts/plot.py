@@ -3,7 +3,7 @@ plot.py
 ====================================
 
 """
-    
+
 import yaml, glob, os, textwrap
 import pandas as pd
 import plotly.express as px
@@ -30,10 +30,11 @@ import numpy as np
 #     script:
 #         "scripts/plot.py"
 
+
 def process_results(available_results):
     """
-    
-    Process results for plotting using a list of avaiable stats files Snakemake provides 
+
+    Process results for plotting using a list of avaiable stats files Snakemake provides
 
     Args:
         available_results: scalar data of available results in the form of stats file list
@@ -69,7 +70,9 @@ def process_results(available_results):
     return df
 
 
-def plot(stats_file_list, output_filename, color_variable, linestyle_variable, title, max_x):
+def plot(
+    stats_file_list, output_filename, color_variable, linestyle_variable, title, max_x
+):
     """
 
     Plot five types of figures controled in Snakemake by feeding in different data:
@@ -88,8 +91,10 @@ def plot(stats_file_list, output_filename, color_variable, linestyle_variable, t
         max_x: extrapolation
 
     """
-    
-    df = process_results(stats_file_list) # Snakemake provides a list of avaiable stats files
+
+    df = process_results(
+        stats_file_list
+    )  # Snakemake provides a list of avaiable stats files
 
     data = []
     for _, row in df.iterrows():
@@ -156,4 +161,5 @@ plot(
     color_variable=snakemake.params.color_variable,
     linestyle_variable=snakemake.params.linestyle_variable,
     title=snakemake.params.title,
-    max_x=snakemake.params.max_x,)
+    max_x=snakemake.params.max_x,
+)

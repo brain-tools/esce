@@ -3,7 +3,7 @@ fit_model.py
 ====================================
 
 """
-    
+
 import json
 import os
 from abc import ABC, abstractmethod
@@ -28,9 +28,9 @@ from sklearn.model_selection import ParameterGrid
 
 class BaseModel(ABC):
     """
-    
+
     Base model class for each model
-    
+
     """
 
     # alternative for switching later
@@ -39,16 +39,16 @@ class BaseModel(ABC):
 
     def __init__(self, model_generator: Callable[..., Any], model_name: str):
         """
-        
+
         Initialize class using a model that is initialized later
-        
+
         """
         self.model_generator = model_generator
         self.model_name = model_name
 
     def score(self, x, y, idx_train, idx_val, idx_test, **kwargs):  # type: ignore
         """
-        
+
         Provide a score for the model performance on the data.
 
         Args:
@@ -56,7 +56,7 @@ class BaseModel(ABC):
             y: targets
             idx: train, validation, test indices
             **kwargs: hyperparmeters
-        
+
         """
 
         # generate model based on hyperparams
@@ -123,9 +123,9 @@ class BaseModel(ABC):
 
 class ClassifierModel(BaseModel):
     """
-    
+
     Base class for classifier models
-    
+
     """
 
     scale_features = True
@@ -152,9 +152,9 @@ class ClassifierModel(BaseModel):
 
 class RegressionModel(BaseModel):
     """
-    
+
     Base class for regression models
-    
+
     """
 
     scale_features = True
@@ -196,12 +196,12 @@ MODELS = {
 
 def get_existing_scores(scores_path_list):
     """
-    
+
     In the case where data was precalculated due to extra minor adjustment, we extract the existing scores if the files exist
-    
+
     Arguments:
         scores_path_list: list of paths for the score files
-    
+
     """
     df_list = []
     for filename in scores_path_list:
@@ -228,13 +228,15 @@ def fit(
     existing_scores_path_list,
 ):
     """
-    
+
     Base fit function
 
     """
     split = json.load(open(split_path, "r"))
     if "error" in split:
-        Path(scores_path).touch() # if error occurs, create file for snakemake to run smoothly
+        Path(
+            scores_path
+        ).touch()  # if error occurs, create file for snakemake to run smoothly
         return
 
     x = np.load(features_path)
@@ -250,8 +252,7 @@ def fit(
     df_existing_scores = get_existing_scores(existing_scores_path_list)
 
     scores = []
-    for params in ParameterGrid(grid[model_name]): # for each hyperparam combination
-
+    for params in ParameterGrid(grid[model_name]):  # for each hyperparam combination
         # extracting only scores corresponding to the hyperparam combinations
         df_existing_scores_filtered = lambda: df_existing_scores.loc[
             (df_existing_scores[list(params)] == pd.Series(params)).all(axis=1)
@@ -259,7 +260,7 @@ def fit(
         if not df_existing_scores.empty and not df_existing_scores_filtered().empty:
             score = dict(df_existing_scores_filtered().iloc[0])
             # print("retrieved score", score)
-        else: # if the scores don't exist, calculate them manually
+        else:  # if the scores don't exist, calculate them manually
             score = model.score(
                 x,
                 y,

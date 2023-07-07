@@ -44,16 +44,20 @@ def prepare_data(
         dataset: dataset name for extracting from predifined datasets
         features_targets_covariates: the string decides which the function prepares
         variant: a special data type that can contain any kind of data
-        custom_datasets: path for custom datasets 
-        
+        custom_datasets: path for custom datasets
+
     """
     # read in predefined datasets or prepare empty files
     if (dataset, variant) in predefined_datasets:
         data = predefined_datasets[(dataset, variant)]()
-    elif features_targets_covariates == "covariates" and variant in [ # if predefined datasets don't exist, use dummy empty files
-        "none",
-        "balanced",
-    ]:
+    elif (
+        features_targets_covariates == "covariates"
+        and variant
+        in [  # if predefined datasets don't exist, use dummy empty files
+            "none",
+            "balanced",
+        ]
+    ):
         data = []
     # turn datas into numpy arrays
     else:
