@@ -45,6 +45,19 @@ jobs:
         conda config --show-sources
         conda config --show
         printenv | sort
+    
+    - name: Build documentation
+      run: |
+        pip install sphinx>=1.8 sphinx_rtd_theme sphinx-copybutton
+        sphinx-build -M html docs docs/build -qW
+        sphinx-build -M html docs docs/build -Eqn -b coverage
+        if [[ -s docs/build/html/python.txt ]]
+        then
+          echo
+          echo "Error: Documentation missing:"
+          echo
+          cat docs/build/html/python.txt
+          exit 1
 
     - name: Run pytest
       # conda setup requires this special shell
@@ -58,18 +71,6 @@ jobs:
         conda install environment.yaml
         pytest tests -r a --cov=esce --cov-report=xml
 
-    - name: Build documentation
-      run: |
-        pip install sphinx>=1.8 sphinx_rtd_theme sphinx-copybutton
-        sphinx-build -M html docs docs/build -qW
-        sphinx-build -M html docs docs/build -Eqn -b coverage
-        if [[ -s docs/build/html/python.txt ]]
-        then
-          echo
-          echo "Error: Documentation missing:"
-          echo
-          cat docs/build/html/python.txt
-          exit 1
     # auto-fixing lint
     # - name: Install auto-fixing linter
     #   run: pip install black flake8
