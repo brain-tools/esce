@@ -48,7 +48,7 @@ jobs:
     
     - name: Build documentation
       run: |
-        pip install sphinx>=1.8 sphinx_rtd_theme sphinx-copybutton
+        pip install sphinx>=1.8 sphinx_rtd_theme sphinx-copybutton piccolo-theme
         sphinx-build -M html docs docs/build -qW
         sphinx-build -M html docs docs/build -Eqn -b coverage
         if [[ -s docs/build/html/python.txt ]]
