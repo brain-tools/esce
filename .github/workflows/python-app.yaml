@@ -31,22 +31,23 @@ jobs:
         ulimit -a
 
     - name: Install Mamba
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        mamba-version: "*"
-        channels: conda-forge,defaults
-        channel-priority: true
-        activate-environment: base
-        environment-file: environment.yaml
-      shell: bash -el {0}
-      run: |
-        mamba create -c conda-forge -c bioconda -n snakemake snakemake
-        conda activate snakemake
-        conda info
-        conda list
-        conda config --show-sources
-        conda config --show
-        printenv | sort
+      steps:
+        - uses: conda-incubator/setup-miniconda@v2
+          with:
+            mamba-version: "*"
+            channels: conda-forge,defaults
+            channel-priority: true
+            activate-environment: base
+            environment-file: environment.yaml
+        - shell: bash -el {0}
+          run: |
+            mamba create -c conda-forge -c bioconda -n snakemake snakemake
+            conda activate snakemake
+            conda info
+            conda list
+            conda config --show-sources
+            conda config --show
+            printenv | sort
 
     - name: Lint with flake8
       run: |
@@ -55,12 +56,6 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    
-    - name: Set up environment
-      run: |
-        conda install -c bioconda snakemake
-        conda activate snakemake
-        conda install environment.yaml
     
     - name: Run pytest
       # conda setup requires this special shell
