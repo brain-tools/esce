@@ -30,26 +30,47 @@ jobs:
         df -h
         ulimit -a
     # More info on options: https://github.com/conda-incubator/setup-miniconda
-    - uses: conda-incubator/setup-miniconda@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-        environment-file: devtools/conda-envs/test_env.yaml
+    # - uses: conda-incubator/setup-miniconda@v2
+    #   with:
+    #     python-version: ${{ matrix.python-version }}
+    #     environment-file: devtools/conda-envs/test_env.yaml
 
-        channels: conda-forge,defaults
+    #     channels: conda-forge,defaults
 
-        activate-environment: test
-        auto-update-conda: false
-        auto-activate-base: false
-        show-channel-urls: true
+    #     activate-environment: test
+    #     auto-update-conda: false
+    #     auto-activate-base: false
+    #     show-channel-urls: true
+    - name: Install Mamba
+      steps:
+        - uses: actions/checkout@v2
+        - uses: conda-incubator/setup-miniconda@v2
+          with:
+            mamba-version: "*"
+            channels: conda-forge,defaults
+            channel-priority: true
+            activate-environment: anaconda-client-env
+            environment-file: environment.yaml
+        - shell: bash -el {0}
+          run: |
+            conda info
+            conda list
+            conda config --show-sources
+            conda config --show
+            printenv | sort
+        - shell: bash -el {0}
+          run: |
+            mamba create -c conda-forge -c bioconda -n snakemake snakemake
+            conda activate snakemake
 
-    - name: Install package
-      # conda setup requires this special shell
-      shell: bash -l {0}
-      run: |
-        python -m pip install --upgrade pip
-        git submodule update --init
-        python -m pip install . --no-deps
-        conda list
+    # - name: Install package
+    #   # conda setup requires this special shell
+    #   shell: bash -l {0}
+    #   run: |
+    #     python -m pip install --upgrade pip
+    #     git submodule update --init
+    #     python -m pip install . --no-deps
+    #     conda list
 
     - name: Lint with flake8
       run: |
