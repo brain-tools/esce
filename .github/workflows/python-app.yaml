@@ -93,6 +93,7 @@ jobs:
     - name: Run example workflow
       shell: bash -l {0}
       run: |
+        conda activate snakemake
         snakemake --cores 1 --configfile example/example_config.yaml --rerun-triggers mtime --use-conda --rerun-incomplete all
   
     # - name: Coverage
