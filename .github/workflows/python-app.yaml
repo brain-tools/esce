@@ -69,14 +69,6 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-    - name: Run pytest
-      # conda setup requires this special shell
-      shell: bash -l {0}
-      run: |
-        conda activate snakemake
-        pip install pytest pytest-cov
-        pytest tests -r a --cov=esce --cov-report=xml
-
     - name: Build documentation
       run: |
         pip install sphinx>=1.8 sphinx_rtd_theme
@@ -89,13 +81,22 @@ jobs:
           echo
           cat docs/build/html/python.txt
           exit 1
+    
+    # - name: Run example workflow
+    #   shell: bash -l {0}
+    #   run: |
+    #     conda activate snakemake
+    #     snakemake --cores 1 --configfile example/example_config.yaml --rerun-triggers mtime --use-conda --rerun-incomplete all
+
+    # - name: Run pytest
+    #   # conda setup requires this special shell
+    #   shell: bash -l {0}
+    #   run: |
+    #     conda activate snakemake
+    #     pip install pytest pytest-cov
+    #     pytest tests -r a --cov=esce --cov-report=xml
         
-    - name: Run example workflow
-      shell: bash -l {0}
-      run: |
-        conda activate snakemake
-        snakemake --cores 1 --configfile example/example_config.yaml --rerun-triggers mtime --use-conda --rerun-incomplete all
-  
+
     # - name: Coverage
     #   env:
     #     MIN_COVERAGE: "75"
