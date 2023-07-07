@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -48,14 +48,19 @@ jobs:
         conda config --show
         printenv | sort
 
-    - name: Lint with flake8
-      run: |
-        pip install flake8==4.0.1
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    
+    #
+    - name: Install auto-fixing linter
+      run: pip install black flake8
+
+    - name: Run linters
+      uses: wearerequired/lint-action@v2
+      with:
+        auto_fix: true
+        black: true
+        black_auto_fix: true
+        flake8: true
+        flake8_auto_fix: false
+
     - name: Run pytest
       # conda setup requires this special shell
       shell: bash -l {0}
