@@ -33,13 +33,14 @@ jobs:
       uses: conda-incubator/setup-miniconda@v2
       with:
         mamba-version: "*"
-        channels: conda-forge, bioconda, defaults
+        channels: defaults
         channel-priority: true
         activate-environment: base
         environment-file: workflow/envs/environment.yaml
     - name: Install packages
       shell: bash -el {0}
       run: |
+        conda activate base
         conda info
         conda list
         conda config --show-sources
