@@ -35,30 +35,33 @@ jobs:
         mamba-version: "*"
         channels: defaults
         channel-priority: true
-        activate-environment: base
+        activate-environment: test
+        auto-activate-base: false
         environment-file: workflow/envs/environment.yaml
-    - name: Install packages
+    - name: Check setup
       shell: bash -el {0}
       run: |
-        conda activate base
+
+        # conda install -n base -c conda-forge mamba
+        # conda activate base
+        # mamba create -c conda-forge -c bioconda -n snakemake snakemake
+        # mamba init
+        # conda activate snakemake
+        # conda install environment.yaml
         conda info
         conda list
         conda config --show-sources
         conda config --show
         printenv | sort
     
-    # - name: Run pytest
-    #   # conda setup requires this special shell
-    #   shell: bash -l {0}
-    #   run: |
-    #     pip install pytest pytest-cov
-    #     conda install -n base -c conda-forge mamba
-    #     conda activate base
-    #     mamba create -c conda-forge -c bioconda -n snakemake snakemake
-    #     mamba init
-    #     mamba activate snakemake
-    #     conda install environment.yaml
-    #     pytest tests -r a --cov=esce --cov-report=xml
+    - name: Run pytest
+      # conda setup requires this special shell
+      shell: bash -l {0}
+      run: |
+        conda info
+        conda list
+        pip install pytest pytest-cov
+        pytest tests -r a --cov=esce --cov-report=xml
 
     - name: Build documentation
       run: |
