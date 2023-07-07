@@ -29,25 +29,24 @@ jobs:
         uname -a
         df -h
         ulimit -a
-
-    - name: Install Mamba
-      steps:
-        - uses: conda-incubator/setup-miniconda@v2
-          with:
-            mamba-version: "*"
-            channels: conda-forge,defaults
-            channel-priority: true
-            activate-environment: base
-            environment-file: environment.yaml
-        - shell: bash -el {0}
-          run: |
-            mamba create -c conda-forge -c bioconda -n snakemake snakemake
-            conda activate snakemake
-            conda info
-            conda list
-            conda config --show-sources
-            conda config --show
-            printenv | sort
+    - name: Set up Mamba
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        mamba-version: "*"
+        channels: conda-forge,defaults
+        channel-priority: true
+        activate-environment: base
+        environment-file: environment.yaml
+    - name: Install packages
+      shell: bash -el {0}
+      run: |
+        mamba create -c conda-forge -c bioconda -n snakemake snakemake
+        conda activate snakemake
+        conda info
+        conda list
+        conda config --show-sources
+        conda config --show
+        printenv | sort
 
     - name: Lint with flake8
       run: |
