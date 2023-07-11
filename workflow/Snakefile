@@ -61,6 +61,8 @@ rule prepare_features_or_targets:
         custom_datasets=config["custom_datasets"],
     conda:
         "envs/environment.yaml"
+    benchmark:
+        repeat("benchmarks/{dataset}/prepare{features_or_targets}_{name}_benchmark.txt",2)
     script:
         "scripts/prepare_data.py"
 
@@ -100,8 +102,8 @@ rule split:
         stratify=config["stratify"],
     output:
         split="results/{dataset}/splits/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}.json",
-    resources:
-        mem_mb=200000,
+    # resources:
+    #     mem_mb=200000,
     benchmark:
         repeat("benchmarks/{dataset}/split{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_benchmark.txt",2)
     conda:
@@ -124,8 +126,8 @@ rule fit:
         ),
     output:
         scores="results/{dataset}/fits/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_{grid}.csv",
-    resources:
-        mem_mb=200000,
+    # resources:
+    #     mem_mb=200000,
     benchmark:
         repeat("benchmarks/{dataset}/{model}_fit_{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_{grid}_benchmark.txt",2)
     conda:
@@ -143,8 +145,8 @@ rule aggregate:
         ),
     output:
         scores="results/{dataset}/scores/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}.csv",
-    resources:
-        mem_mb=100000,
+    # resources:
+    #     mem_mb=100000,
     benchmark:
         repeat("benchmarks/{dataset}/aggregate{model}_{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}_benchmark.txt",2),
     conda:
@@ -163,8 +165,8 @@ rule extrapolate:
         bootstraps="results/{dataset}/statistics/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}.bootstrap.json",
     conda:
         "envs/environment.yaml"
-    resources:
-        mem_mb=20000,
+    # resources:
+    #     mem_mb=20000,
     script:
         "scripts/extrapolate.py"
 
