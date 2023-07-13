@@ -41,7 +41,7 @@ jobs:
       uses: Bhacaz/checkout-files@v2
       with:
         branch: ${{ github.head_ref || github.ref_name }}
-        files: tests example
+        files: tests example config
 
     - name: Setup Miniconda
       uses: conda-incubator/setup-miniconda@v2
