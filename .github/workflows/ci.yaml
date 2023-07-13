@@ -33,8 +33,32 @@ jobs:
       run: |
         poetry run snakemake -F -c1 --configfile tests/test_config.yaml
 
-    # - name: Run snakemake submodule test (slow)
-    #   run: |
-    #     export GITHUB_TOKEN=${{ github.token }}
-    #     poetry run snakemake -s tests/snakefile_submodule -c1 -F --use-conda --conda-frontend conda
+  additional_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout files
+      uses: Bhacaz/checkout-files@v2
+      with:
+        files:
+          - tests
+          - example
+
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        mamba-version: "*"
+        auto-activate-base: true
+
+    - name: Install Snakemake with Mamba
+      shell: bash -l {0}
+      run: |
+        mamba install -c conda-forge snakemake
+
+    - name: Run snakemake submodule test (slow)
+      env:
+        - GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        snakemake -s tests/snakefile_submodule -c1 --use-conda
+
         
