@@ -60,6 +60,23 @@ jobs:
       shell: bash -l {0}
       run: |
         export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-        snakemake --use-conda -s -c1  tests/snakefile_submodule 
+        snakemake --use-conda -c1 -s tests/snakefile_submodule 
 
-        
+  final:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout files
+      uses: Bhacaz/checkout-files@v2
+      with:
+        branch: ${{ github.head_ref || github.ref_name }}
+        files: tests example config
+
+    - name: Testing
+      uses: snakemake/snakemake-github-action@v1
+      with:
+        directory: '.test'
+        snakefile: 'tests/snakefile_submodule'
+        args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'
+        env: |
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
