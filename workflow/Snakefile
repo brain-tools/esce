@@ -1,3 +1,7 @@
+import sys
+sys.path.append(workflow.source_path("./../"))
+
+
 from snakemake.utils import validate
 from esce.validate_config import validate_details
 
