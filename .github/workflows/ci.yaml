@@ -57,8 +57,8 @@ jobs:
 
     - name: Run snakemake submodule test (slow)
       env:
-        - GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
         snakemake -s tests/snakefile_submodule -c1 --use-conda
 
         
