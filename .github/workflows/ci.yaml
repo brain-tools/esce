@@ -54,6 +54,7 @@ jobs:
         conda install -c bioconda snakemake
 
     - name: Run snakemake submodule test (slow)
+      shell: bash -l {0}
       run: |
         export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
         snakemake -s tests/snakefile_submodule -c1 --use-conda
