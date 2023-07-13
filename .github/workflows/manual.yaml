@@ -16,10 +16,10 @@ jobs:
           - example
 
     - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          mamba-version: "*"
-          auto-activate-base: true
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        mamba-version: "*"
+        auto-activate-base: true
 
     - name: Install Snakemake with Mamba
       shell: bash -l {0}
