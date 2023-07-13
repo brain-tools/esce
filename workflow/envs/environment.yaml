@@ -11,5 +11,5 @@ dependencies:
   - pip
   - pyyaml
   - h5py
-  - pip:
-    - git+https://${GITHUB_TOKEN}@github.com/brain-tools/esce.git@fix_move_esce
+  # - pip:
+  #   - git+https://${GITHUB_TOKEN}@github.com/brain-tools/esce.git@fix_move_esce
