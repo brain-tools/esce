@@ -11,9 +11,9 @@ jobs:
     - name: Checkout files
       uses: Bhacaz/checkout-files@v2
       with:
-      files:
-        - tests
-        - example
+        files:
+          - tests
+          - example
 
     - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2
@@ -28,7 +28,7 @@ jobs:
 
     - name: Run snakemake submodule test (slow)
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         snakemake -s tests/snakefile_submodule -c1 --use-conda
 
