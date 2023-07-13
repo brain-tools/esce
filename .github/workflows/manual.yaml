@@ -1,0 +1,33 @@
+name: Manual workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    - name: Checkout files
+      uses: Bhacaz/checkout-files@v2
+      with:
+      files:
+        - tests
+        - example
+
+    - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          mamba-version: "*"
+          auto-activate-base: true
+
+    - name: Install Snakemake with Mamba
+      shell: bash -l {0}
+      run: |
+        mamba install -c conda-forge snakemake
+
+    - name: Run snakemake submodule test (slow)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        snakemake -s tests/snakefile_submodule -c1 --use-conda
+
