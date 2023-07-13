@@ -26,7 +26,7 @@ jobs:
     - name: Install Snakemake with Mamba
       shell: bash -l {0}
       run: |
-        mamba install -c conda-forge snakemake
+        mamba install -c bioconda snakemake
 
     - name: Run snakemake submodule test (slow)
       run: |
