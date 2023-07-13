@@ -60,6 +60,6 @@ jobs:
       shell: bash -l {0}
       run: |
         export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-        snakemake -s tests/snakefile_submodule -c1 --use-conda
+        snakemake --use-conda -s -c1  tests/snakefile_submodule 
 
         
