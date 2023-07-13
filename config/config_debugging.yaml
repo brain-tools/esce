@@ -1,0 +1,12 @@
+custom_datasets:
+  ukbb:
+    features:   {
+        'whole-genetic': '/ritter/share/projects/lauraf/data/ukbb_derived/whole_features/whole-genetics-pgrm.tsv',
+    }
+    targets: {
+        'whole-sex': '/ritter/share/projects/lauraf/data/ukbb_derived/whole_targets/whole-sex.tsv',
+        'whole-age-0': '/ritter/share/projects/lauraf/data/ukbb_derived/whole_targets/whole-age-0.tsv',
+        'whole-bmi-0': '/ritter/share/projects/lauraf/data/ukbb_derived/whole_targets/whole-bmi-0.tsv',
+        
+    }
+    covariates: {}
