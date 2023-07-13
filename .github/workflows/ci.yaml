@@ -46,6 +46,9 @@ jobs:
     - name: Setup Miniconda
       uses: conda-incubator/setup-miniconda@v2
       with:
+        python-version: "3.9"
+        channels: conda-forge,nodefaults
+        channel-priority: true
         mamba-version: "*"
         auto-activate-base: true
 
