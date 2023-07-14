@@ -54,3 +54,20 @@ Here is a visualisation of the workflow
 <img src="resources/dag.png" width="500">
 
 it was created via `snakemake --forceall --rulegraph --configfile example/example_config.yaml | dot -Tpng > dag.png` (requires graphviz)
+
+
+## Testing
+
+To make it easier to verify the functionality of the code, and for the simplification of future contributions, we added unit tests so that we can confirm that we are getting what we expect back from important methods.
+
+As the pytest package should be installed when you install the environment, simply run the following line to run all tests:
+
+```
+pytest
+```
+
+Or run the following line with the name(s) of a file you want to test separately as some test files (files that invovle generating graphs) take slightly longer to run:
+
+```
+pytest tests/test_<file_name>.py 
+```
