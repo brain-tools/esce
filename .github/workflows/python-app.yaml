@@ -51,6 +51,7 @@ jobs:
           echo
           cat docs/build/html/python.txt
           exit 1
+        fi
 
     ## auto-fixing lint
     # - name: Install auto-fixing linter
