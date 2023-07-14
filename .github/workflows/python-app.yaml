@@ -37,7 +37,7 @@ jobs:
 
     - name: Run snakemake submodule test (slow)
       run: |
-        export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+        export GITHUB_TOKEN=${{ secrets.ACCESS_TOKEN }}
         poetry run snakemake -s tests/snakefile_submodule -c1 -F --use-conda --conda-frontend conda
 
     - name: Build documentation
