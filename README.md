@@ -54,3 +54,11 @@ Here is a visualisation of the workflow
 <img src="resources/dag.png" width="500">
 
 it was created via `snakemake --forceall --rulegraph --configfile example/example_config.yaml | dot -Tpng > dag.png` (requires graphviz)
+
+## Documentation
+
+Besides the detailed comments in all `workflow/scripts/` files provided to help you understand the codes, by running the following code, you will be able to read through our html formatted documentation built with `Sphinx`: 
+
+```
+sphinx-build -v -b html docs/ docs/_build/
+```
