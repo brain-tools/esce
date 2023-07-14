@@ -1,7 +1,7 @@
 name: Python Tests
 
 on:
-  push_request:
+  push:
     branches: [ test ]
   pull_request:
     branches: [ main, dev ]
