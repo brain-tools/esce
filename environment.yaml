@@ -12,7 +12,6 @@ dependencies:
   - pip
   - pytest
   - pytest-cov
-  - flake8==4.0.1
   - pyyaml
   - black
   - h5py
