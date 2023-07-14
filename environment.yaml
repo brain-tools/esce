@@ -12,8 +12,11 @@ dependencies:
   - pip
   - pytest
   - pytest-cov
-  - sphinx
+  - flake8==4.0.1
+  - sphinx>=1.8
   - sphinx_rtd_theme
+  - sphinx-copybutton
+  - piccolo-theme
   - pyyaml
   - black
   - h5py
