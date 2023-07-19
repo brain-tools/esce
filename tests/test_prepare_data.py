@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from esce.prepare_data import prepare_data
+from workflow.scripts.prepare_data import prepare_data
 
 TEST_CASES = [
     ("tsv", "targets"),

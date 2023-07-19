@@ -6,7 +6,7 @@ import pandas as pd
 import yaml
 from sklearn.datasets import make_classification
 
-from esce.fit import fit
+from workflow.scripts.fit_model import fit
 
 
 def test_fit(tmpdir):

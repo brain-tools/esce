@@ -1,6 +1,6 @@
 import pandas as pd
 
-from esce.aggregate import aggregate
+from workflow.scripts.aggregate import aggregate
 
 
 def test_aggregate(tmpdir):

@@ -1,7 +1,7 @@
 import h5py
 import pytest
 
-from esce.prepare_data import prepare_data
+from workflow.scripts.prepare_data import prepare_data
 
 
 @pytest.mark.slow()

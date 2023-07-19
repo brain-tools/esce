@@ -1,5 +1,5 @@
 from snakemake.utils import validate
-from esce.validate_config import validate_details
+from validate_config import validate_details
 
 configfile: workflow.source_path("../config/config.yaml")
 configfile: workflow.source_path("../config/style.yaml")

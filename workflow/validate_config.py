@@ -2,9 +2,8 @@ import os
 
 import yaml
 
-from esce.base_models import RegressionModel
-from esce.models import MODELS
-from esce.predefined_datasets import predefined_datasets as PREDEFINED_DATASETS
+from scripts.fit_model import MODELS, RegressionModel
+from scripts.prepare_data import predefined_datasets as PREDEFINED_DATASETS
 
 
 def validate_details(config):

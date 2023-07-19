@@ -4,7 +4,7 @@ from sklearn.linear_model import LogisticRegression, Ridge
 from sklearn.metrics import accuracy_score, r2_score
 from sklearn.preprocessing import StandardScaler
 
-from esce.base_models import ClassifierModel, RegressionModel
+from workflow.scripts.fit_model import ClassifierModel, RegressionModel
 
 
 def test_classifier_model():
