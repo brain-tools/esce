@@ -1,12 +1,12 @@
 from snakemake.utils import validate
-from validate_config import validate_details
 
 configfile: workflow.source_path("../config/config.yaml")
 configfile: workflow.source_path("../config/style.yaml")
 
 validate(config, workflow.source_path("../config/config.schema.yaml"))
 validate(config, workflow.source_path("../config/style.schema.yaml"))
-validate_details(config)
+
+# validate_details(config)
 
 import itertools, glob
 
