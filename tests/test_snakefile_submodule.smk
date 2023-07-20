@@ -6,6 +6,7 @@ min_version("7.0")
 
 configfile: workflow.source_path("../tests/test_config.yaml")
 configfile: workflow.source_path("../config/style.yaml")
+configfile: workflow.source_path("../config/grids.yaml")
 
 
 
