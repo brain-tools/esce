@@ -220,8 +220,6 @@ def fit(
 
     model = MODELS[model_name]
 
-    # if model is ClassifierModel, make sure that y is categorical
-
     df_existing_scores = get_existing_scores(existing_scores_path_list)
 
     scores = []

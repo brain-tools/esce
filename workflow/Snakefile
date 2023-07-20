@@ -128,7 +128,7 @@ rule fit:
         targets="results/{dataset}/targets/{targets}_{targets_cni}.h5",
         split="results/{dataset}/splits/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}.json",
     params:
-        grid=lambda wildcards: config["grids"][wildcards.grid],
+        grid = lambda wildcards: config["grids"][wildcards.grid],
         existing_scores=lambda wildcards: glob.glob(
             "results/{dataset}/fits/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_*.csv".format(
                 **wildcards
