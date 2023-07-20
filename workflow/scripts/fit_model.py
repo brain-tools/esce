@@ -204,7 +204,7 @@ def fit(
     split_path,
     scores_path,
     model_name,
-    grid_path,
+    grid,
     existing_scores_path_list,
 ):
     split = json.load(open(split_path))
@@ -218,7 +218,6 @@ def fit(
     fy = h5py.File(targets_path, "r")
     y = fy["data"]
 
-    grid = yaml.safe_load(open(grid_path))
     model = MODELS[model_name]
 
     # if model is ClassifierModel, make sure that y is categorical
@@ -266,6 +265,6 @@ if __name__ == "__main__":
         snakemake.input.split,
         snakemake.output.scores,
         snakemake.wildcards.model,
-        snakemake.input.grid,
+        snakemake.params.grid,
         snakemake.params.existing_scores,
     )

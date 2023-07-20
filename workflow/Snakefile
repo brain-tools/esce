@@ -2,11 +2,10 @@ from snakemake.utils import validate
 
 configfile: workflow.source_path("../config/config.yaml")
 configfile: workflow.source_path("../config/style.yaml")
+configfile: workflow.source_path("../config/grids.yaml")
 
 validate(config, workflow.source_path("../config/config.schema.yaml"))
 validate(config, workflow.source_path("../config/style.schema.yaml"))
-
-# validate_details(config)
 
 import itertools, glob
 
@@ -49,6 +48,15 @@ by_cni_plots = expand_from_config(
     "results/{dataset}/plots/cni/{features}_all-features-cni_{targets}_all-targets-cni_all-matching_{models}_{grid}.png",
 )
 
+
+rule onstart:
+    input:
+        fit_model = workflow.source_path('scripts/fit_model.py'),
+        prepare_data = workflow.source_path('scripts/prepare_data.py'),
+    params:
+        config = config
+    script:
+        workflow.source_path('scripts/validate_config.py')
 
 rule all:
     input:
@@ -119,8 +127,8 @@ rule fit:
         features="results/{dataset}/features/{features}_{features_cni}.h5",
         targets="results/{dataset}/targets/{targets}_{targets_cni}.h5",
         split="results/{dataset}/splits/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}.json",
-        grid=lambda wildcards: workflow.source_path("../config/grids/{grid}.yaml".format(**wildcards)),
     params:
+        grid=lambda wildcards: config["grids"][wildcards.grid],
         existing_scores=lambda wildcards: glob.glob(
             "results/{dataset}/fits/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_*.csv".format(
                 **wildcards
@@ -272,7 +280,7 @@ rule plot_hyperparameters:
     params:
         title=config['figure_titles']['hyperparameters'],
         hyperparameter_scales=config["hyperparameter_scales"],
-        grid=lambda wildcards: workflow.source_path("../config/grids/{grid}.yaml".format(**wildcards)),
+        grid=lambda wildcards: config['grids'][wildcards.grid],
     output:
         plot="results/{dataset}/plots/hps/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}.png",
     conda:

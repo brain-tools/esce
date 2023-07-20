@@ -10,12 +10,12 @@ import yaml
 def plot(
     stats_filename,
     output_filename,
-    grid_filename,
+    grid,
     hyperparameter_scales,
     model_name,
     title,
 ):
-    grid = yaml.safe_load(open(grid_filename))[model_name]
+    grid = grid[model_name]
     # ignore empty files (insufficient samples in dataset)
     if os.stat(stats_filename).st_size == 0 or not grid:
         Path(output_filename).touch()
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     plot(
         stats_filename=snakemake.input.scores,
         output_filename=snakemake.output.plot,
-        grid_filename=snakemake.params.grid,
+        grid=snakemake.params.grid,
         hyperparameter_scales=snakemake.params.hyperparameter_scales,
         model_name=snakemake.wildcards.model,
         title=snakemake.params.title,

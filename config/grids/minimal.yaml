@@ -1,3 +1,0 @@
-majority-classifier: {}
-ridge-reg: {'alpha':[0.1,1,10]}
-ridge-cls: {'alpha':[0.1,1,10]}
