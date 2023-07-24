@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Optional, Tuple
 
 import h5py
 import numpy as np
@@ -29,7 +29,7 @@ def generate_random_split(
     do_stratify: bool = False,
     seed: int = 0,
     mask: Optional[np.ndarray] = False,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Generate a random split of the data."""
     if mask is False:
         idx_originial = np.arange(len(y))
@@ -74,7 +74,7 @@ def generate_matched_split(
     do_stratify: bool = False,
     seed: int = 0,
     mask: Optional[np.ndarray] = False,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Generate a matched split of the data.
 
     Assumes a binary classification target variable, coded as 0 and 1, with 1 being the positive (patient) class and 0 being the negative (control) class.

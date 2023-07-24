@@ -8,7 +8,7 @@ base_models.py
 
 
 from abc import ABC, abstractmethod
-from typing import Any, Callable
+from typing import Any, Callable, Dict
 
 import numpy as np
 from sklearn.metrics import (
@@ -94,7 +94,7 @@ class BaseModel(ABC):
         y_train: np.ndarray,
         y_val: np.ndarray,
         y_test: np.ndarray,
-    ) -> dict[str, float]:
+    ) -> Dict[str, float]:
         """Compute metrics for the model performance on the data."""
         pass
 
