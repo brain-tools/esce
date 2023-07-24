@@ -6,6 +6,7 @@ min_version("7.0")
 
 configfile: workflow.source_path("../tests/test_config.yaml")
 configfile: workflow.source_path("../config/style.yaml")
+configfile: workflow.source_path("../config/grids.yaml")
 
 
 
@@ -20,17 +21,6 @@ module esce:
 # use all rules from https://github.com/brain-tools/esce
 use rule * from esce as esce_*
 
-
-rule prepare_data:
-    input:
-        [
-            config["custom_datasets"][dataset][category][feature]
-            for dataset in config["custom_datasets"]
-            for category in config["custom_datasets"][dataset]
-            for feature in config["custom_datasets"][dataset][category]
-        ],
-
-
-rule run:
+rule all:
     input:
         rules.esce_all.input,

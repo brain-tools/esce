@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import pytest
 
-from esce.extrapolate import extrapolate
+from workflow.scripts.extrapolate import extrapolate
 
 
 @pytest.fixture()

@@ -2,12 +2,8 @@ import os
 
 import yaml
 
-from esce.base_models import RegressionModel
-from esce.models import MODELS
-from esce.predefined_datasets import predefined_datasets as PREDEFINED_DATASETS
 
-
-def validate_details(config):
+def validate_details(config, MODELS, PREDEFINED_DATASETS, RegressionModel):
     errors = []
 
     # check that each experiment has the expected values
@@ -66,13 +62,12 @@ def validate_details(config):
 
         # check that grid has a corresponding yaml file in config/grids
         # and that all models have a key in the grid
-        grid_path = os.path.join("config", "grids", exp["grid"] + ".yaml")
-        if not os.path.exists(grid_path):
+        if  exp["grid"] not in config['grids']:
             errors.append(
                 f"experiment {exp_name}['grid'] should be a string from: {os.listdir('config/grids')}"
             )
         else:
-            grid = yaml.safe_load(open(grid_path))
+            grid = config['grids'][exp["grid"]]
             for model in exp["models"]:
                 if model not in grid:
                     errors.append(
@@ -80,8 +75,8 @@ def validate_details(config):
                     )
 
         # if target_cni is not none, then matching must be none and model must be regression
-        if exp["targets_cni"] is not ["none"]:
-            if exp["matching"] is not ["none"]:
+        if exp["targets_cni"] != ["none"]:
+            if exp["matching"] != ['none']:
                 errors.append(
                     f"experiment {exp_name} matching must be 'none' when {exp_name} targets_cni is not 'none'"
                 )
@@ -108,10 +103,23 @@ def validate_details(config):
 
 
 if __name__ == "__main__":
-    import yaml
+    import importlib.util  
 
-    with open("config/config.yaml") as f:
-        config = yaml.load(f)
-    errors = validate_details(config)
+    spec = importlib.util.spec_from_file_location('fit_model', snakemake.input.fit_model)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    spec = importlib.util.spec_from_file_location('prepare_data', snakemake.input.prepare_data)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    from fit_model import MODELS, RegressionModel
+    from prepare_data import predefined_datasets as PREDEFINED_DATASETS
+
+    errors = validate_details(snakemake.params.config, MODELS, PREDEFINED_DATASETS, RegressionModel)
+
     for error in errors:
         print(error)
+
+    if len(errors) > 0:
+        raise ValueError("config file has errors")

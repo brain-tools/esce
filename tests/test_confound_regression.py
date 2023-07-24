@@ -3,7 +3,7 @@ import h5py
 import numpy as np
 import pytest
 
-from esce.confound_regression import confound_regression
+from workflow.scripts.confound_regression import confound_regression
 
 
 @pytest.mark.parametrize(

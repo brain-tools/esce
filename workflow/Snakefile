@@ -1,12 +1,12 @@
 from snakemake.utils import validate
-from esce.validate_config import validate_details
 
 configfile: workflow.source_path("../config/config.yaml")
 configfile: workflow.source_path("../config/style.yaml")
+configfile: workflow.source_path("../config/grids.yaml")
 
 validate(config, workflow.source_path("../config/config.schema.yaml"))
 validate(config, workflow.source_path("../config/style.schema.yaml"))
-validate_details(config)
+validate(config, workflow.source_path("../config/grids.schema.yaml"))
 
 import itertools, glob
 
@@ -24,6 +24,12 @@ def expand_from_config(filename):
         )
     )
 
+all_data = [
+    config["custom_datasets"][dataset][category][feature]
+    for dataset in config["custom_datasets"]
+    for category in config["custom_datasets"][dataset]
+    for feature in config["custom_datasets"][dataset][category]
+]
 all_fits = expand_from_config(
     "results/{dataset}/fits/{models}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{sample_sizes}_{seeds}_{grid}.csv"
 )
@@ -52,6 +58,8 @@ by_cni_plots = expand_from_config(
 
 rule all:
     input:
+        'results/config_validation.done',
+        all_data,
         all_fits,
         sample_complexity_results,
         individual_plots,
@@ -61,6 +69,18 @@ rule all:
         by_cni_plots,
         hp_plots,
 
+
+rule check_config:
+    priority: 100
+    input:
+        fit_model = workflow.source_path('scripts/fit_model.py'),
+        prepare_data = workflow.source_path('scripts/prepare_data.py'),
+    params:
+        config = config
+    output:
+        touch('results/config_validation.done')
+    script:
+        workflow.source_path('scripts/validate_config.py')
 
 rule prepare_features_or_targets:
     output:
@@ -119,8 +139,8 @@ rule fit:
         features="results/{dataset}/features/{features}_{features_cni}.h5",
         targets="results/{dataset}/targets/{targets}_{targets_cni}.h5",
         split="results/{dataset}/splits/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}.json",
-        grid=lambda wildcards: workflow.source_path("../config/grids/{grid}.yaml".format(**wildcards)),
     params:
+        grid = lambda wildcards: config["grids"][wildcards.grid],
         existing_scores=lambda wildcards: glob.glob(
             "results/{dataset}/fits/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{samplesize}_{seed}_*.csv".format(
                 **wildcards
@@ -272,7 +292,7 @@ rule plot_hyperparameters:
     params:
         title=config['figure_titles']['hyperparameters'],
         hyperparameter_scales=config["hyperparameter_scales"],
-        grid=lambda wildcards: workflow.source_path("../config/grids/{grid}.yaml".format(**wildcards)),
+        grid=lambda wildcards: config['grids'][wildcards.grid],
     output:
         plot="results/{dataset}/plots/hps/{model}/{features}_{features_cni}_{targets}_{targets_cni}_{matching}_{grid}.png",
     conda:

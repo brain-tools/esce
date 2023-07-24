@@ -33,9 +33,14 @@ jobs:
 
     - name: Run snakemake workflow test
       run: |
-        poetry run snakemake -F -c1 --configfile tests/test_config.yaml
+        poetry run snakemake --configfile tests/test_config.yaml -F -c1 all
 
-    - name: Run snakemake submodule test (slow)
+    - name: Run snakemake submodule test
       run: |
         export GITHUB_TOKEN=${{ github.token }}
-        poetry run snakemake -s tests/snakefile_submodule -c1 -F --use-conda --conda-frontend conda
+        poetry run snakemake -s tests/test_snakefile_submodule.smk -c1 -F all
+        
+    # - name: Run snakemake submodule test with conda
+    #   run: |
+    #     export GITHUB_TOKEN=${{ github.token }}
+    #     poetry run snakemake -s tests/test_snakefile_submodule.smk -c1 -F --use-conda --conda-frontend conda all

@@ -6,7 +6,7 @@ import pandas as pd
 import yaml
 from sklearn.datasets import make_classification
 
-from esce.fit import fit
+from workflow.scripts.fit_model import fit
 
 
 def test_fit(tmpdir):
@@ -46,9 +46,6 @@ def test_fit(tmpdir):
     hp = {"alpha": [0.1, 1.0, 10.0]}
     grid = {model_name: hp}
 
-    with open(grid_path, "w") as f:
-        yaml.dump(grid, f)
-
     # Run the fit function
     scores_path = tmpdir.join("scores.csv")
     existing_scores_path_list = []
@@ -58,7 +55,7 @@ def test_fit(tmpdir):
         split_path,
         scores_path,
         model_name,
-        grid_path,
+        grid,
         existing_scores_path_list,
     )
 
@@ -112,9 +109,6 @@ def test_fit_with_existing_scores(tmpdir):
     hp = {"alpha": [0.1, 1.0, 10.0]}
     grid = {model_name: hp}
 
-    with open(grid_path, "w") as f:
-        yaml.dump(grid, f)
-
     # Prepare an existing scores file
     EXISTING_ACC = -1
     existing_scores_path = str(tmpdir.join("existing_scores.csv"))
@@ -141,7 +135,7 @@ def test_fit_with_existing_scores(tmpdir):
         split_path,
         scores_path,
         model_name,
-        grid_path,
+        grid,
         existing_scores_path_list,
     )
 

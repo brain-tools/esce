@@ -4,7 +4,7 @@ import h5py
 import numpy as np
 import pytest
 
-from esce.generate_splits import (
+from workflow.scripts.generate_splits import (
     generate_matched_split,
     generate_random_split,
     write_splitfile,

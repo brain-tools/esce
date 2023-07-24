@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "grids": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "patternProperties": {
+              "^.*$": {
+                "type": "array",
+                "items": { "type": "number" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["grids"]
+}
