@@ -85,6 +85,7 @@ def plot(
     # skip if no data
     if len(data) > 0:
         data = pd.concat(data, axis=0, ignore_index=True)
+        data = data.sort_values(color_variable)
     else:
         Path(output_filename).touch()
         return
